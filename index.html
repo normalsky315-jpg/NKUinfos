@@ -64,16 +64,13 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--sans);font-si
 .search-inp:focus{border-color:var(--border-dark)}
 select.fil{padding:9px 12px;border:1.5px solid var(--border);background:var(--surface);font:15px var(--sans);color:var(--text);cursor:pointer;outline:none}
 select.fil:focus{border-color:var(--border-dark)}
-.calib-btn{padding:9px 18px;font-family:var(--mono);font-size:13px;font-weight:600;border:1.5px solid var(--amber);background:var(--amber-bg);color:var(--amber);cursor:pointer;margin-left:auto;transition:all .12s}
-.calib-btn:hover{background:var(--amber);color:#fff}
+
+
 .tbl-ct{font-family:var(--mono);font-size:13px;color:var(--mute)}
 
-/* ── CALIBRATION BAR ── */
-#calibBar{display:none;background:var(--amber-bg);border-bottom:2px solid var(--amber);padding:12px 28px;align-items:center;gap:14px;flex-wrap:wrap}
-#calibBar select{font:15px var(--mono);padding:7px 12px;border:1.5px solid var(--amber);min-width:240px;background:#fff;cursor:pointer}
-#calibStatus{font:14px var(--mono);color:var(--amber)}
-.calib-export{font:13px var(--mono);font-weight:600;padding:8px 16px;background:var(--border-dark);color:#fff;border:none;cursor:pointer;letter-spacing:.06em;margin-left:auto}
-.calib-close{font:13px var(--mono);font-weight:600;padding:8px 14px;background:#fff;color:var(--amber);border:1.5px solid var(--amber);cursor:pointer}
+
+
+
 
 /* ── MAIN CONTAINER ── */
 .main{max-width:1560px;margin:0 auto;padding:20px 28px 60px}
@@ -168,6 +165,26 @@ select.fil:focus{border-color:var(--border-dark)}
 .tb-green{color:var(--green);background:var(--green-bg)}
 .tb-amber{color:var(--amber);background:var(--amber-bg)}
 
+
+/* ── FLOOR PLAN GALLERY ── */
+.fp-section{margin-top:14px}
+.fp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:8px}
+.fp-thumb{width:100%;aspect-ratio:4/3;object-fit:cover;cursor:pointer;border:1px solid var(--border);transition:opacity .12s}
+.fp-thumb:hover{opacity:.85}
+.fp-thumb.error{background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:12px}
+.fp-count{font-size:12px;color:var(--dim);font-family:var(--mono)}
+/* lightbox */
+.lb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:99999;align-items:center;justify-content:center;flex-direction:column}
+.lb-overlay.on{display:flex}
+.lb-img{max-width:90vw;max-height:85vh;object-fit:contain;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.lb-close{position:fixed;top:16px;right:20px;color:#fff;font-size:32px;cursor:pointer;background:none;border:none;line-height:1;opacity:.8}
+.lb-close:hover{opacity:1}
+.lb-nav{position:fixed;top:50%;transform:translateY(-50%);color:#fff;font-size:36px;cursor:pointer;background:rgba(0,0,0,.3);border:none;padding:12px 16px;line-height:1;opacity:.7}
+.lb-nav:hover{opacity:1}
+.lb-prev{left:8px}
+.lb-next{right:8px}
+.lb-counter{position:fixed;bottom:16px;color:rgba(255,255,255,.7);font-family:var(--mono);font-size:13px}
+
 /* ── MODAL ── */
 .overlay{display:none;position:fixed;inset:0;background:rgba(28,25,23,.55);backdrop-filter:blur(3px);z-index:9000;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
 .overlay.open{display:flex}
@@ -234,7 +251,7 @@ select.fil:focus{border-color:var(--border-dark)}
   <div class="header-inner">
     <div class="brand">
       <h1>高大特區 22 案 · 房產分析儀表板</h1>
-      <div class="sub">樂居實登 113.01–115.03 · V15 · 2026.05.16</div>
+      <div class="sub">樂居實登 113.01–115.03 · V16 · 2026.05.16</div>
     </div>
     <div class="header-stats">
       <div class="hstat"><span class="hstat-l">案數</span><span class="hstat-v">22</span></div>
@@ -280,17 +297,8 @@ select.fil:focus{border-color:var(--border-dark)}
       <option value="count_desc">成交量 ↓</option>
     </select>
     <span class="tbl-ct" id="tblCt"></span>
-    <button class="calib-btn" id="calibBtn" onclick="toggleCalib()">📍 校正座標</button>
+    
   </div>
-</div>
-
-<!-- 校正工具列 -->
-<div id="calibBar">
-  <span style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--amber)">座標校正模式</span>
-  <select id="calibSelect"><option value="">— 選擇建案 —</option></select>
-  <span id="calibStatus" style="font:14px var(--mono);color:var(--amber)">選好建案後點地圖正確位置</span>
-  <button class="calib-export" onclick="exportCoords()">複製座標 JSON</button>
-  <button class="calib-close" onclick="toggleCalib()">關閉</button>
 </div>
 
 <div class="main">
@@ -326,6 +334,23 @@ select.fil:focus{border-color:var(--border-dark)}
 <div id="toast"></div>
 
 <script>
+const FLOOR_PLANS = {
+  "高大之森": ["https://drive.google.com/thumbnail?id=1P6N6lCsW0ISvxqWqktQKTTxUbqst3xUv&sz=w1200", "https://drive.google.com/thumbnail?id=1XSYdxd20aq_K14dPkCHV2FGz4xlcAi8m&sz=w1200", "https://drive.google.com/thumbnail?id=13cw96hmqrwoe4Jp42XWFG-WZOwuUMyM5&sz=w1200", "https://drive.google.com/thumbnail?id=1LUKTk-A44dQe3TLc7GbUcLXRhnB8jpdr&sz=w1200", "https://drive.google.com/thumbnail?id=1Nlt4UIJTls7efzPb9cJ0loGs08-Gb-Mj&sz=w1200", "https://drive.google.com/thumbnail?id=1tTKgfwZNefjTtW9CcNBKfS3cTJIfMrNu&sz=w1200", "https://drive.google.com/thumbnail?id=1_fCt2QM5RSoye3OWE1SopwoO4yMKwykI&sz=w1200", "https://drive.google.com/thumbnail?id=1gQxEJ46GHGq9ajg-5U_26gymbhcoUwig&sz=w1200"],
+  "冠傑Ai": ["https://drive.google.com/thumbnail?id=1ntHbNzMojXZayuqbox62dAI6mH46ftkw&sz=w1200", "https://drive.google.com/thumbnail?id=1VefZgWGtOpRxka_VD2pWlzMsgNYz_eos&sz=w1200", "https://drive.google.com/thumbnail?id=1bsZf8IlGw0yALJruxN-KZ5ONKInmXWRl&sz=w1200", "https://drive.google.com/thumbnail?id=1ePESF5G4XBQG08W9ZS8NT064uR-u4bjI&sz=w1200", "https://drive.google.com/thumbnail?id=1o-G_9s_0ZvJdOTYKQAUkWdu6HiZXZvu7&sz=w1200", "https://drive.google.com/thumbnail?id=1R1YZPuC1ALZQCZ62GarXatAMCkWbV401&sz=w1200", "https://drive.google.com/thumbnail?id=1TvwTD7KoBKzUbYPS5AO-zX6Wj4Fy-pnF&sz=w1200", "https://drive.google.com/thumbnail?id=1zhNaUnqoWnedQ9Yu_FWQppj8Skspfyzq&sz=w1200"],
+  "遠見禾悅": ["https://drive.google.com/thumbnail?id=1LE9kXP68UkRq3UctWOQT5XEPMjVV3OVs&sz=w1200", "https://drive.google.com/thumbnail?id=1GWnqUY6UAhS7ZjDnM_InyY3wawTVI2Qt&sz=w1200", "https://drive.google.com/thumbnail?id=1G_jQ2racwsXLCvKi4zGnssWCWjiXeucW&sz=w1200", "https://drive.google.com/thumbnail?id=17zPpQQyvDa6dB10Qm8VWHkCnYHhl6DM9&sz=w1200", "https://drive.google.com/thumbnail?id=1eE5-tJGAaqUVwbZlBv9rcpEz3GttRlf8&sz=w1200", "https://drive.google.com/thumbnail?id=1wHutdJHfVhTJs6e9ZR7qVlcK3ax9Ncy5&sz=w1200", "https://drive.google.com/thumbnail?id=1jPlOFiyvqSSsaRQyfgVAvFP0kHxVwQvr&sz=w1200", "https://drive.google.com/thumbnail?id=12eezR-BrIG28CP7Oyy7ah3ejT9KRAOF8&sz=w1200"],
+  "崑庭馥御": ["https://drive.google.com/thumbnail?id=16dfvCWSh2aZ6g3y8Yrpb7gh_Hj9F6Oaj&sz=w1200", "https://drive.google.com/thumbnail?id=19uD9W_vXxvARWOAOzeJhNPKIUgqzgx-g&sz=w1200", "https://drive.google.com/thumbnail?id=1cx6SSkYTxvQAET8W-2xsswdVXHcmBsCL&sz=w1200", "https://drive.google.com/thumbnail?id=1jNkrGtpd-PM06II8OiSLpTKtjdp1ivx6&sz=w1200", "https://drive.google.com/thumbnail?id=1D1LNz1oD-cEQnRp8HO6J4VSiZwb1jPBL&sz=w1200", "https://drive.google.com/thumbnail?id=1Dpty1oc4doBc3TGR0s1vdJseq1FrYXXH&sz=w1200", "https://drive.google.com/thumbnail?id=1TBWSsoqtvUvDemMfoow3uLUAureftNz0&sz=w1200", "https://drive.google.com/thumbnail?id=1kA0ynJFZ12PPn6Bz6nZ_1SebwFUZL0mH&sz=w1200"],
+  "琢萃": ["https://drive.google.com/thumbnail?id=1wtaPCdM9klLIY3gt2-jjA1hqMida4HQ0&sz=w1200", "https://drive.google.com/thumbnail?id=17st0_l46Yep7P7isdTD0r8pLElZykIKy&sz=w1200", "https://drive.google.com/thumbnail?id=1aK2QvzWwtF8m8zo32uQEWoNkFvYVPbnq&sz=w1200", "https://drive.google.com/thumbnail?id=1ktG7lGENrvpb5taFNDxbDw7HbbExnrMP&sz=w1200", "https://drive.google.com/thumbnail?id=1Mpo5pLcZXsS3qV7Ue6oXSQKz_2SC0yQ2&sz=w1200", "https://drive.google.com/thumbnail?id=1QkmHNiG9yA8vq8KyxSWJvhUnwqxVKwEk&sz=w1200", "https://drive.google.com/thumbnail?id=1jNRgWqHxQxhTv6kiG65eY4lVd4FyB_sL&sz=w1200", "https://drive.google.com/thumbnail?id=1K5WLLI9RPB0HpGdrZ08CZor9R3VGHh-s&sz=w1200", "https://drive.google.com/thumbnail?id=1UfT90y4s3mXSi9gkLbI_12AG06-TnVp5&sz=w1200", "https://drive.google.com/thumbnail?id=1UOiTqMFDcrY1QW6baWFnqkbn3hkKdBeN&sz=w1200", "https://drive.google.com/thumbnail?id=1fDb4dMgbhRLlJAHXtuLdVx7mMH0PMsGd&sz=w1200"],
+  "月理河": ["https://drive.google.com/thumbnail?id=1POdagGK_GAcpIZe8s2e-YvIuz7fQl2Xq&sz=w1200", "https://drive.google.com/thumbnail?id=1UR0pFBgXRKJnP6HspRviLgREa8Gq4W6t&sz=w1200", "https://drive.google.com/thumbnail?id=19YbRBeD99WjMgEjH7aro8tVIclk1MeMv&sz=w1200", "https://drive.google.com/thumbnail?id=1qNTJo_XJfSDKDMj21S2yBFurkyrEVUM5&sz=w1200", "https://drive.google.com/thumbnail?id=1llwlFu2OknVr5ZsM1tgNUJ3olvOkhnRS&sz=w1200", "https://drive.google.com/thumbnail?id=1G56kheKbx103WEGI6dYlYbx16-wEgQyw&sz=w1200", "https://drive.google.com/thumbnail?id=1PSAlaxW4pbRiGFYDFBmNGwSvCSNnmof3&sz=w1200", "https://drive.google.com/thumbnail?id=1amJg1qd3exsNp3TUt1_AXmtoXOIOnNrY&sz=w1200"],
+  "行見築": ["https://drive.google.com/thumbnail?id=1jfqK0eHGAyqic8VhrYERhLtfMyIWKKAO&sz=w1200", "https://drive.google.com/thumbnail?id=1b_1wBwgF89ioej4X0GyruhZEiWRRtrso&sz=w1200", "https://drive.google.com/thumbnail?id=1BkGuvABuLk1n0-yz2RnF3FJIT5NXEh43&sz=w1200", "https://drive.google.com/thumbnail?id=1UCo34uJHaPMvcTledjRcCOGXp2hVNSCf&sz=w1200", "https://drive.google.com/thumbnail?id=1MDoUJs9jGK27MIIOeSohZPNvboTafTs3&sz=w1200", "https://drive.google.com/thumbnail?id=1OaGQbXsBkPXyiYUos1T_-Xt3qs0Qzm0_&sz=w1200", "https://drive.google.com/thumbnail?id=1OujV8B8tmvhrmABvKpPxL1mgu1cZZpZc&sz=w1200", "https://drive.google.com/thumbnail?id=1urX3Til7_n-UKjloeCTOxXEX0Kp25VQC&sz=w1200"],
+  "蒙瑪特": ["https://drive.google.com/thumbnail?id=1KCWw-4QUmy3w7sxXK6RbuCSHjdkHBlLP&sz=w1200", "https://drive.google.com/thumbnail?id=1elNY1GEVg4koOLDZyofZta1vQ6Wp5UAw&sz=w1200", "https://drive.google.com/thumbnail?id=10bw7-YN8MZqs85Vssxn3nvMn3DI1qrmx&sz=w1200", "https://drive.google.com/thumbnail?id=1uT1XGHKDYZrtc55OPBESfBLzo-mxx6mI&sz=w1200", "https://drive.google.com/thumbnail?id=1JL8lbjkanXRhPWj2RxtpXnqBxFwEEgKN&sz=w1200", "https://drive.google.com/thumbnail?id=1rNvOmtMLTlkKHR4laFa7OiW_es3B5xAL&sz=w1200", "https://drive.google.com/thumbnail?id=1vBRMpeDp45eFIdcCIzT9J63YsAGyFNm1&sz=w1200", "https://drive.google.com/thumbnail?id=1lZljr8gHRHKVYeWKKiwUpI5OfyXLAJFp&sz=w1200"],
+  "翊城晶綻": ["https://drive.google.com/thumbnail?id=1agJFCANN9is4xFnAtOOOONBAnILdlefT&sz=w1200", "https://drive.google.com/thumbnail?id=1FuW29oD-QqaxqwyqCCtcKS0NLU6Zkm1_&sz=w1200", "https://drive.google.com/thumbnail?id=1R9SHMNMG_4JJtfmr1uG1SU9mpJZ1evPy&sz=w1200", "https://drive.google.com/thumbnail?id=1WN3nJlZ-3HvClsFbRn5Hm5SfM0ou2HwD&sz=w1200", "https://drive.google.com/thumbnail?id=1WwYTgQ4p2AJBKwEc1_PkTzt2kh28AnSV&sz=w1200", "https://drive.google.com/thumbnail?id=1kkAha98z1pQC2UBUCqrJPvWVQGKHYsHU&sz=w1200"],
+  "華雄交響曲": ["https://drive.google.com/thumbnail?id=1eiG4r18PFt0DypINsjWRhDQA37TH9nt3&sz=w1200", "https://drive.google.com/thumbnail?id=11tPDsSO2gWIjee3cJdvKfcuxaFZDIUAc&sz=w1200", "https://drive.google.com/thumbnail?id=1B-P2gFhgxQcPvMqENpgKTmF-fj8_whLl&sz=w1200", "https://drive.google.com/thumbnail?id=1q7-Xc_4HONz2XKNeHpe6dfZMCsmexzag&sz=w1200", "https://drive.google.com/thumbnail?id=1eSfSRZQWwLVgLXQGYssN_Xc_hvW0wEA-&sz=w1200", "https://drive.google.com/thumbnail?id=1Bkhd_bWP-_Rp2eYq6XVFqUbDkrO9pEdV&sz=w1200", "https://drive.google.com/thumbnail?id=1Rn5JeOKpZpQdBZZTs5C_8CthnnKhPG1_&sz=w1200", "https://drive.google.com/thumbnail?id=1Y48LvM9vaATKdRHR5p6K7xQt1cvcw16t&sz=w1200"],
+  "鳳凰萃": ["https://drive.google.com/thumbnail?id=1hSNQhX2zE80ID9KnOjXhcFIGKOTmQvkh&sz=w1200", "https://drive.google.com/thumbnail?id=1Oq7Sv7IzBL7_h-9-VX7CnCk-rLW4JnFR&sz=w1200", "https://drive.google.com/thumbnail?id=11tctkurh1dLXFRc5N9GM8_6ZRBcOHERV&sz=w1200", "https://drive.google.com/thumbnail?id=1HEeqCQV1QO7PQS_rKFhDfa2UPT1WJf_2&sz=w1200", "https://drive.google.com/thumbnail?id=1rb1b3He40psd7B-Lzt0zgxAFkKrR1nr4&sz=w1200", "https://drive.google.com/thumbnail?id=1jLd9UHWDlWgfy8XjQ8_NpR_9udOz2-9o&sz=w1200", "https://drive.google.com/thumbnail?id=1hmrXNrvS5J9HqndpmcJEuQalaZf4aR_5&sz=w1200", "https://drive.google.com/thumbnail?id=11HhgvU5Zsc7Yn9iYi4tOo0hCScvzlXzM&sz=w1200"],
+  "遠雄一靚": ["https://drive.google.com/thumbnail?id=1qc4BBOXM486j0n58erRwl_qzFmpMvMUc&sz=w1200", "https://drive.google.com/thumbnail?id=1AxLZMulrplMfYM3usXJuipUfXAL7o-kF&sz=w1200", "https://drive.google.com/thumbnail?id=1pAbN31zT3v-_ZfMyz5fcRIrnwAl73Z5U&sz=w1200", "https://drive.google.com/thumbnail?id=1_PnTBDl6Pknx08UVlOEvXM4HRUtRU6cq&sz=w1200", "https://drive.google.com/thumbnail?id=1niUoKLX5doqeS1XGOOZxZumByOgZs12q&sz=w1200", "https://drive.google.com/thumbnail?id=1phFxg74jG4wnlGdtt6n6S8bXezEfiH5v&sz=w1200", "https://drive.google.com/thumbnail?id=1uabwY68jdctD-FfNAo5Gg56cX5MNC1l8&sz=w1200", "https://drive.google.com/thumbnail?id=14KWvBfUGdKsQS1x4JJ6cDI5LGkT4SraS&sz=w1200"],
+  "博市陞": ["https://drive.google.com/thumbnail?id=1aj6-4ymP1mM0GgecGwn5I5ma-zVXOTKb&sz=w1200", "https://drive.google.com/thumbnail?id=1cZGcjktjObjsWMJnw8wZJUW5nSZL4XbG&sz=w1200", "https://drive.google.com/thumbnail?id=1tGQ11BFZ_PqKVdkh7DRjHADqEEbFuwTl&sz=w1200", "https://drive.google.com/thumbnail?id=1REmGBTSsCua0Nf1Ta4eKJgBZlFck77ZV&sz=w1200", "https://drive.google.com/thumbnail?id=123Cnua5Xj5dUVRJ55HlQwNB1iYrvY821&sz=w1200", "https://drive.google.com/thumbnail?id=1EvUePrkcrOA3--nWcoKmRwC1giRz2Kl2&sz=w1200", "https://drive.google.com/thumbnail?id=18uOozheYf4GVsAEgmyP9kZytqcsEKahW&sz=w1200", "https://drive.google.com/thumbnail?id=1WHaZNTfQNX8IwuDU6k_wk9iJYGclxx4-&sz=w1200"],
+  "以學MDT": ["https://drive.google.com/thumbnail?id=1XfpFCarsdPSxJNqMiHdaOa9IpP8q8U5w&sz=w1200", "https://drive.google.com/thumbnail?id=1Xa6pZuC7k05E94SP1_KxYQKf0Lp7g_r5&sz=w1200", "https://drive.google.com/thumbnail?id=1MEDQHy-WGGDP4FE-3pjdQCeQgTbYtCfb&sz=w1200", "https://drive.google.com/thumbnail?id=1npgMHm8eXxqoqcEp1mtFh9YXNwKSwALZ&sz=w1200", "https://drive.google.com/thumbnail?id=12rTwP2AO7tt077GrR_H8L0Zg1iFb7IoY&sz=w1200", "https://drive.google.com/thumbnail?id=1q-XvPjIWVU7jhyh-JwLkIyLbfxIZhIY9&sz=w1200", "https://drive.google.com/thumbnail?id=1U-_1a1UKGY_FS8wgjPhtVmhv6H_jWFSg&sz=w1200", "https://drive.google.com/thumbnail?id=1S3xNpM4MgDBkgV4dg7rQxrnUpCF25cso&sz=w1200"],
+};
+
 const BASE = 36.42;
 
 const projects = [
@@ -676,7 +701,6 @@ function initMap(){
     </div>`,{maxWidth:230});
     mapMarkers.push(m);
   });
-  attachCalibClick();
 }
 function closePopups(){if(mapObj)mapMarkers.forEach(m=>m.closePopup())}
 
@@ -731,72 +755,74 @@ function openModal(i){
     <div class="mat-list">${(p.other||[]).map(o=>`<span class="chip">${o}</span>`).join('')}</div>
     ${p.notes?`<div class="notes-box"><b style="color:var(--amber)">注意事項</b><br>${p.notes}</div>`:''}
     <div class="analysis-box"><span class="al">分析觀點</span>${p.analysis}</div>
+    <div id="fp-inject"></div>
     <div class="link-row">
       ${p.s591?`<a class="link-btn" href="${p.s591}" target="_blank">591 詳情 ↗</a>`:''}
       <a class="link-btn" href="https://www.google.com/maps/?q=${p.lat},${p.lng}" target="_blank">Google Map ↗</a>
     </div>`;
+  // 插入平面圖
+  const fpDiv = document.getElementById('fp-inject');
+  const fpImgs = FLOOR_PLANS[p.name];
+  if(fpImgs && fpImgs.length > 0){
+    let fpHtml = '<div class="msec-title">FLOOR PLANS · 平面圖</div>';
+    fpHtml += '<div class="fp-count">共 ' + fpImgs.length + ' 張 · 點擊放大</div>';
+    fpHtml += '<div class="fp-grid">';
+    for(let fi=0; fi<fpImgs.length; fi++){
+      fpHtml += '<img class="fp-thumb" src="' + fpImgs[fi] + '" loading="lazy" onclick="openLB(' + i + ',' + fi + ')" onerror="this.style.display=&apos;none&apos;">';
+    }
+    fpHtml += '</div>';
+    fpDiv.innerHTML = fpHtml;
+  } else {
+    fpDiv.innerHTML = '';
+  }
   document.getElementById('overlay').classList.add('open');
   if(mapObj) mapObj.setView([p.lat,p.lng],17,{animate:true});
 }
+
+// ── LIGHTBOX ──
+let lbName = '', lbIdx = 0;
+function openLB(projIdx, idx){
+  lbName = projects[projIdx].name; lbIdx = idx;
+  const imgs = FLOOR_PLANS[lbName];
+  document.getElementById('lbImg').src = imgs[idx];
+  document.getElementById('lbCounter').textContent = (idx+1) + ' / ' + imgs.length;
+  document.getElementById('lbOverlay').classList.add('on');
+}
+function closeLB(){ document.getElementById('lbOverlay').classList.remove('on'); }
+function lbNav(d){
+  const imgs = FLOOR_PLANS[lbName];
+  lbIdx = (lbIdx + d + imgs.length) % imgs.length;
+  document.getElementById('lbImg').src = imgs[lbIdx];
+  document.getElementById('lbCounter').textContent = (lbIdx+1) + ' / ' + imgs.length;
+}
+document.addEventListener('keydown', e=>{
+  const lb = document.getElementById('lbOverlay');
+  if(!lb.classList.contains('on')) return;
+  if(e.key==='Escape') closeLB();
+  if(e.key==='ArrowLeft') lbNav(-1);
+  if(e.key==='ArrowRight') lbNav(1);
+});
+
 function closeModal(){document.getElementById('overlay').classList.remove('open')}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
-
-// ── 校正工具 ──
-let calibMode=false,calibIdx=null;
-const correctedCoords={};
-function toggleCalib(){
-  calibMode=!calibMode;
-  const bar=document.getElementById('calibBar');
-  bar.style.display=calibMode?'flex':'none';
-  if(calibMode){
-    setView('map');
-    const sel=document.getElementById('calibSelect');
-    sel.innerHTML='<option value="">— 選擇建案 —</option>';
-    projects.forEach((p,i)=>{sel.innerHTML+=`<option value="${i}">${p.name}${correctedCoords[i]?' ✓':''}</option>`});
-    sel.onchange=()=>{calibIdx=sel.value===''?null:parseInt(sel.value);updateCalibStatus()};
-    document.getElementById('calibBtn').textContent='✕ 關閉校正';
-  } else {
-    calibIdx=null;
-    document.getElementById('calibBtn').textContent='📍 校正座標';
-  }
-}
-function updateCalibStatus(){
-  const el=document.getElementById('calibStatus');
-  if(calibIdx===null){el.textContent='選好建案後點地圖正確位置';return}
-  const p=projects[calibIdx];
-  const c=correctedCoords[calibIdx];
-  el.innerHTML=c?`<b>${p.name}</b> 已校正 → ${c.lat.toFixed(6)}, ${c.lng.toFixed(6)}`:`<b>${p.name}</b> → 點地圖設新位置`;
-}
-function exportCoords(){
-  const txt=projects.map((p,i)=>{const c=correctedCoords[i];return`  {name:'${p.name}', lat:${c?c.lat.toFixed(6):p.lat}, lng:${c?c.lng.toFixed(6):p.lng}${c?' /* ✓ */':''}}`}).join(',\n');
-  navigator.clipboard.writeText(`const coords = [\n${txt}\n];`).then(()=>showToast('✓ 座標已複製')).catch(()=>showToast('複製失敗，請手動'));
-}
-function attachCalibClick(){
-  mapObj.on('click',function(e){
-    if(!calibMode||calibIdx===null) return;
-    const {lat,lng}=e.latlng;
-    correctedCoords[calibIdx]={lat,lng};
-    projects[calibIdx].lat=lat;
-    projects[calibIdx].lng=lng;
-    mapMarkers[calibIdx].setLatLng([lat,lng]);
-    showToast(`✓ ${projects[calibIdx].name} → ${lat.toFixed(6)}, ${lng.toFixed(6)}`);
-    updateCalibStatus();
-    const sel=document.getElementById('calibSelect');
-    for(const opt of sel.options){if(opt.value===String(calibIdx)&&!opt.text.includes('✓'))opt.text+=' ✓'}
-  });
-}
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.style.display='block';
-  clearTimeout(t._tid);t._tid=setTimeout(()=>{t.style.display='none'},3000);
-}
 
 // ── INIT ──
 document.getElementById('searchInput').addEventListener('input',renderCards);
 document.getElementById('tagFilter').addEventListener('change',renderCards);
 document.getElementById('statusFilter').addEventListener('change',renderCards);
 document.getElementById('sortSelect').addEventListener('change',renderCards);
+setView('list');
 renderCards();
 </script>
+
+<!-- LIGHTBOX -->
+<div class="lb-overlay" id="lbOverlay">
+  <button class="lb-close" onclick="closeLB()">×</button>
+  <button class="lb-nav lb-prev" onclick="lbNav(-1)">‹</button>
+  <img class="lb-img" id="lbImg" src="" alt="平面圖">
+  <button class="lb-nav lb-next" onclick="lbNav(1)">›</button>
+  <div class="lb-counter" id="lbCounter"></div>
+</div>
+
 </body>
 </html>
