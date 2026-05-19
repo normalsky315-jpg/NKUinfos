@@ -149,6 +149,14 @@ select.fil:focus{border-color:var(--border-dark)}
 .chip{display:inline-block;font-size:12px;padding:3px 9px;border:1px solid var(--border);color:var(--dim);background:var(--surface2);border-radius:2px}
 .chip.k{color:var(--amber);border-color:var(--amber-border);background:var(--amber-bg)}
 .chip.b{color:var(--blue);border-color:#BFDBFE;background:#EFF6FF}
+.chip.am{color:#6D28D9;border-color:#DDD6FE;background:#F5F3FF}
+.chip.am-more{color:var(--mute);border-color:var(--border);background:var(--surface2)}
+/* amenities card row */
+.cc-amenities{padding:6px 16px 10px;display:flex;flex-wrap:wrap;gap:5px;border-top:1px dashed var(--border)}
+/* amenities modal section */
+.am-group{margin-bottom:10px}
+.am-group-label{font-size:11px;color:#6D28D9;letter-spacing:.1em;text-transform:uppercase;font-family:var(--mono);font-weight:700;margin-bottom:5px}
+.am-chips{display:flex;flex-wrap:wrap;gap:5px}
 
 /* card footer: vs bar */
 .cc-foot{padding:10px 16px;background:var(--surface2);border-top:1px solid var(--border);display:flex;align-items:center;gap:10px}
@@ -361,6 +369,7 @@ const projects = [
     r2:40, r3:60, r4:0, loan:'75%', handover:'2028下半年',
     kit:['櫻花廚具'], bath:['TOTO衛浴','Hansgrohe龍頭','Panasonic四合一暖風'],
     other:['人臉辨識電子鎖','Honeywell空清','日立永大電梯','BWT軟水','長庚活水','德國Classen木地板'],
+    amenities:{'休閒社交':['接待大廳','交誼廳','閱覽室','視聽室'],'兒童親子':['兒童遊戲區'],'景觀綠化':['中庭花園','空中花園'],'生活機能':['信箱區','曬被區']},
     notes:'公設比35.8%／建蔽率33.66%／基地1253.51坪。中德建設、承優營造，大瀚建築師事務所。工程零付款方案。',
     analysis:'20樓校園首排地標，大學南路面對25萬坪高大校園，314戶純住家，建材達輕豪宅等級。',
     tag:'premium', lat:22.730950, lng:120.280611, s591:'https://newhouse.591.com.tw/139790/detail'},
@@ -372,6 +381,7 @@ const projects = [
     r2:55, r3:45, r4:0, loan:'70%', handover:'2029Q3',
     kit:['建材待補（預售屋未完整公布）'], bath:['建材待補'],
     other:['遠雄555安心保固（結構25年/防水5年/地壁磚5年）','全平面480位','公設比36%'],
+    amenities:{'景觀綠化':['森林大門退縮景觀','空中綠意陽台','中庭綠境'],'生活機能':['接待大廳','EV充電（480位）']},
     notes:'公設比36%／建蔽率28.99%／基地2432坪。林子森林伯諭聯合建築師。貸款僅70%（全區最嚴）。',
     analysis:'品牌信譽最強，換約流動性最佳。貸款僅70%，自備款需求高。',
     tag:'premium', lat:22.729602, lng:120.280209, s591:'https://newhouse.591.com.tw/139855/detail'},
@@ -395,6 +405,7 @@ const projects = [
     kit:['堡立名廚豪山三機','波蘭Amica洗碗機','Amica IH感應爐','日本KVK花灑'],
     bath:['和成智慧型超級馬桶（全戶）'],
     other:['德國太格隔音地板','BWT全棟淨水','5+5膠合超鋁氣密窗','後勁溪水岸第一排'],
+    amenities:{'休閒社交':['接待大廳','交誼廳','會議室'],'景觀綠化':['空中花園'],'生活機能':['信箱區','曬被區']},
     notes:'公設比25~34.36%（全區最低）／建蔽率39.09%／基地897.23坪／管費80元。許堅倚建築師。',
     analysis:'公設比最低、水岸景觀稀缺，建材規格紮實。一年均價已從40.36萬上漲至42.29萬。',
     tag:'premium', lat:22.721025, lng:120.279742, s591:'https://newhouse.591.com.tw/137113/detail'},
@@ -406,7 +417,7 @@ const projects = [
     r2:73, r3:21, r4:6, loan:'80%', handover:'已完工',
     kit:['林內三機','Panasonic廚櫃'], bath:['HCG雙免治','Panasonic暖風'],
     other:['防水保固10年','冠軍磁磚'],
-    notes:'2房比例達73%，投資屬性強。防水保固10年。',
+    amenities:{'運動健身':['健身房'],'休閒娛樂':['KTV','Lounge Bar'],'休閒社交':['接待大廳','交誼廳'],'景觀綠化':['空中花園'],'生活機能':['信箱區','曬被區','EV充電預留']},
     analysis:'2房73%投資導向。防水保固10年罕見，溢價+8.8%守穩。',
     tag:'normal', lat:22.729691, lng:120.282784, s591:null},
 
@@ -418,6 +429,7 @@ const projects = [
     kit:['德國noblessa廚具','SVAGO感應爐','BOSCH全嵌洗碗機'],
     bath:['Villeroy&Boch五金','Panasonic暖風'],
     other:['LOW-E膠合玻璃','3M除氯淨水','日本三井MITSUI公設','229戶零店面','管費75元（全區最低）'],
+    amenities:{'運動健身':['健身房'],'休閒社交':['接待大廳','交誼廳','閱覽室'],'兒童親子':['兒童遊戲區'],'景觀綠化':['三重綠意景觀','空中花園'],'生活機能':['信箱區','EV充電預留']},
     notes:'公設比36%／建蔽率28.8%／基地1513坪／管費75元。許堅倚建築師。',
     analysis:'高雄大學首排綠景，日本三井公設設計＋4房產品。管費75元全區最低，自住有利。',
     tag:'normal', lat:22.732979, lng:120.275128, s591:'https://newhouse.591.com.tw/139856/detail'},
@@ -451,7 +463,7 @@ const projects = [
     r2:0, r3:100, r4:0, loan:'80%', handover:'已完工',
     kit:['義大利Miton等級進口廚具'], bath:['INAX精品衛浴'],
     other:['公設比34%','全3房配置（區域唯一）','戶戶邊間雙梯'],
-    notes:'公設比34%／建蔽率28.36%／基地1452.49坪。梁慶源沈鈺峰聯合建築師。',
+    amenities:{'運動健身':['健身房'],'休閒娛樂':['KTV','視聽室'],'休閒社交':['接待大廳','交誼廳'],'兒童親子':['親子遊戲區'],'景觀綠化':['中庭花園','空中花園'],'生活機能':['信箱區','曬被區']},
     analysis:'純3房、低公設、戶戶邊間，自住首選。66筆成交流動性佳，+6.8%溢價穩健。',
     tag:'normal', lat:22.732190, lng:120.294212, s591:'https://newhouse.591.com.tw/137479/detail'},
 
@@ -473,7 +485,7 @@ const projects = [
     r2:40, r3:38, r4:22, loan:'80%', handover:'2030Q4',
     kit:['BOSCH全嵌洗碗機','Panasonic廚具'], bath:['Panasonic雙免治（全戶）'],
     other:['BWT全棟淨水','全熱交換器','一樓4.7米','全平面138位','管費80元'],
-    notes:'公設比36.5%／建蔽率30.19%／基地910.97坪。陳鵬宇建築師。',
+    amenities:{'運動健身':['健身房'],'休閒社交':['接待大廳','交誼廳','閱覽室','棋藝室'],'娛樂才藝':['鋼琴教室'],'生活機能':['信箱區']},
     analysis:'純自住規劃，含4房22%家庭客。低梯戶比、建材紮實，46筆成交流動性佳。',
     tag:'normal', lat:22.730988, lng:120.289325, s591:'https://newhouse.591.com.tw/138788/detail'},
 
@@ -495,6 +507,7 @@ const projects = [
     r2:56, r3:44, r4:0, loan:'80%', handover:'2026Q3',
     kit:['櫻花全套廚具','廚下熱飲機'], bath:['TOTO全系列雙免治（全戶）'],
     other:['德國BWT軟水','3M全棟淨水','長庚活水','日立永大電梯','GreenWeb防霾紗窗','一期已完銷'],
+    amenities:{'運動健身':['健身房','瑜伽教室'],'休閒娛樂':['KTV','Lounge Bar','視聽室'],'休閒社交':['接待大廳','交誼廳','閱覽室'],'兒童親子':['兒童遊戲區','親子遊戲區'],'景觀綠化':['中庭花園','空中花園'],'生活機能':['信箱區','曬被區','廚藝教室']},
     notes:'此案為高大之森一期，二期為「高大之森2・高大之上」。基地1345.5坪／建蔽率39.74%。承優營造、大瀚建築師。',
     analysis:'全區成交量No.1（331筆）。預售最新成交53.4萬/坪改寫楠梓新高，完工後換手價可能修正。',
     tag:'premium', lat:22.722786, lng:120.275654, s591:'https://newhouse.591.com.tw/134280/detail'},
@@ -550,7 +563,7 @@ const projects = [
     r2:10, r3:90, r4:0, loan:'80%', handover:'已完工(2023)',
     kit:['歐化廚具（木紋耐磨）'], bath:['電腦免治馬桶（主臥）'],
     other:['24層超高層景觀（全區最高）','均質3房','管費55元','基地1300坪商三'],
-    notes:'公設比36%／建蔽率37.5%／基地1300坪。梁慶源沈鈺峰聯合建築師。',
+    amenities:{'運動健身':['健身房'],'休閒娛樂':['KTV'],'休閒社交':['接待大廳','交誼廳'],'兒童親子':['兒童遊戲區'],'景觀綠化':['中庭花園'],'生活機能':['信箱區','曬被區']},
     analysis:'24層為全區最高棟。完工2年，市場已修正至31.47萬。高樓景觀性價比高。',
     tag:'discount', lat:22.728090, lng:120.274785, s591:'https://newhouse.591.com.tw/122784/detail'},
 
@@ -641,6 +654,11 @@ function renderCards(){
     const prCls=pct2cls(p);
     const kits=(p.kit||[]).slice(0,2).map(k=>`<span class="chip k">${k.substring(0,20)}</span>`).join('');
     const baths=(p.bath||[]).slice(0,1).map(b=>`<span class="chip b">${b.substring(0,18)}</span>`).join('');
+    // amenities card summary
+    const allAm=p.amenities?Object.values(p.amenities).flat():[];
+    const amShow=allAm.slice(0,4).map(a=>`<span class="chip am">${a}</span>`).join('');
+    const amMore=allAm.length>4?`<span class="chip am-more">+${allAm.length-4}</span>`:'';
+    const amRow=allAm.length>0?`<div class="cc-amenities">${amShow}${amMore}</div>`:'';
     const soldPct=p.sold?p.sold.pct:null;
     const soldBar=soldPct!==null?`<div class="cc-sold">
       <div class="sold-label">
@@ -663,6 +681,7 @@ function renderCards(){
       </div>
       ${soldBar}
       <div class="cc-chips">${kits}${baths}</div>
+      ${amRow}
       <div class="cc-foot">
         <div class="vs-track"><div class="vs-center"></div><div class="vs-fill ${barCls}" style="width:${barW/2}%"></div></div>
         <span class="vs-pct ${p.pct>=0?'up':'dn'}">${(p.pct>=0?'+':'')+p.pct.toFixed(1)}%</span>
@@ -753,6 +772,14 @@ function openModal(i){
     </div>
     <div class="msec-title">特色配備</div>
     <div class="mat-list">${(p.other||[]).map(o=>`<span class="chip">${o}</span>`).join('')}</div>
+    ${p.amenities && Object.keys(p.amenities).length>0 ? `
+    <div class="msec-title">公設設施</div>
+    <div>${Object.entries(p.amenities).map(([cat,items])=>`
+      <div class="am-group">
+        <div class="am-group-label">${cat}</div>
+        <div class="am-chips">${items.map(it=>`<span class="chip am">${it}</span>`).join('')}</div>
+      </div>`).join('')}
+    </div>` : ''}
     ${p.notes?`<div class="notes-box"><b style="color:var(--amber)">注意事項</b><br>${p.notes}</div>`:''}
     <div class="analysis-box"><span class="al">分析觀點</span>${p.analysis}</div>
     <div id="fp-inject"></div>
