@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0044)https://normalsky315-jpg.github.io/NKUinfos/ -->
+<html lang="zh-TW"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>高大特區 22 案 · 房產分析儀表板</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./高大特區 22 案 · 房產分析儀表板_files/leaflet.css">
+<script src="./高大特區 22 案 · 房產分析儀表板_files/leaflet.js.下載"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="./高大特區 22 案 · 房產分析儀表板_files/css2" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -252,7 +252,12 @@ select.fil:focus{border-color:var(--border-dark)}
   .hstat-v{font-size:17px}
 }
 </style>
-</head>
+<style>
+  .imageye-selected {
+    outline: 2px solid black !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
+  }
+</style></head>
 <body>
 
 <div class="header">
@@ -262,7 +267,7 @@ select.fil:focus{border-color:var(--border-dark)}
       <div class="sub">樂居實登 113.01–115.03 · V16 · 2026.05.16</div>
     </div>
     <div class="header-stats">
-      <div class="hstat"><span class="hstat-l">案數</span><span class="hstat-v">22</span></div>
+      <div class="hstat"><span class="hstat-l">案數</span><span class="hstat-v">20</span></div>
       <div class="hstat"><span class="hstat-l">區域基準</span><span class="hstat-v">36.42<span style="font-size:13px;color:var(--dim)"> 萬/坪</span></span></div>
       <div class="hstat"><span class="hstat-l">最高均價</span><span class="hstat-v" style="color:var(--red)">50.20</span></div>
       <div class="hstat"><span class="hstat-l">最低均價</span><span class="hstat-v" style="color:var(--green)">28.99</span></div>
@@ -283,8 +288,8 @@ select.fil:focus{border-color:var(--border-dark)}
 
 <div style="max-width:1560px;margin:0 auto">
   <div class="toolbar">
-    <button class="vbtn active" id="btnList" onclick="setView('list')">卡片</button>
-    <button class="vbtn" id="btnMap" onclick="setView('map')">地圖</button>
+    <button class="vbtn active" id="btnList" onclick="setView(&#39;list&#39;)">卡片</button>
+    <button class="vbtn" id="btnMap" onclick="setView(&#39;map&#39;)">地圖</button>
     <input class="search-inp" id="searchInput" placeholder="搜尋案名、建商、建材…">
     <select class="fil" id="tagFilter">
       <option value="all">全部定位</option>
@@ -304,14 +309,14 @@ select.fil:focus{border-color:var(--border-dark)}
       <option value="sold_desc">售出率 ↓</option>
       <option value="count_desc">成交量 ↓</option>
     </select>
-    <span class="tbl-ct" id="tblCt"></span>
+    <span class="tbl-ct" id="tblCt">20 / 20 案</span>
     
   </div>
 </div>
 
 <div class="main">
   <!-- MAP -->
-  <div id="mapView">
+  <div id="mapView" style="display: none;">
     <div class="map-head">
       <h2>地圖分布 · 案名＋均價</h2>
       <span class="mleg">■ 紅=溢價 ■ 黑=均值 ■ 綠=折價 ⬚ 虛線=預售</span>
@@ -320,7 +325,553 @@ select.fil:focus{border-color:var(--border-dark)}
   </div>
 
   <!-- CARDS -->
-  <div id="listView"><!-- cards --></div>
+  <div id="listView"><div class="case-card premium" onclick="openModal(12)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">高大之森</div>
+          <div class="cc-price red">50.20<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">中德建設（茂德）</span>
+          <span class="status-pill sp-pre">預售屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--red)">91%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill red" style="width:91%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 331 / 362 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">櫻花全套廚具</span><span class="chip k">廚下熱飲機</span><span class="chip b">TOTO全系列雙免治（全戶）</span></div>
+      <div class="cc-amenities"><span class="chip am">健身房</span><span class="chip am">瑜伽教室</span><span class="chip am">KTV</span><span class="chip am">Lounge Bar</span><span class="chip am-more">+11</span></div>
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:50%"></div></div>
+        <span class="vs-pct up">+37.8%</span>
+        <span class="tag-badge tb-red">溢價</span>
+      </div>
+    </div><div class="case-card premium" onclick="openModal(0)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">高大之森2・高大之上</div>
+          <div class="cc-price red">43.13<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">中德建設</span>
+          <span class="status-pill sp-pre">預售屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--red)">11%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill red" style="width:11%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 35 / 314 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">櫻花廚具</span><span class="chip b">TOTO衛浴</span></div>
+      <div class="cc-amenities"><span class="chip am">接待大廳</span><span class="chip am">交誼廳</span><span class="chip am">閱覽室</span><span class="chip am">視聽室</span><span class="chip am-more">+5</span></div>
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:36.84788577704558%"></div></div>
+        <span class="vs-pct up">+18.4%</span>
+        <span class="tag-badge tb-red">溢價</span>
+      </div>
+    </div><div class="case-card premium" onclick="openModal(1)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">遠雄一靚</div>
+          <div class="cc-price red">42.46<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">遠雄建設</span>
+          <span class="status-pill sp-pre">預售屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--red)">13%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill red" style="width:13%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 61 / 461 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">建材待補（預售屋未完整公布）</span><span class="chip b">建材待補</span></div>
+      <div class="cc-amenities"><span class="chip am">森林大門退縮景觀</span><span class="chip am">空中綠意陽台</span><span class="chip am">中庭綠境</span><span class="chip am">接待大廳</span><span class="chip am-more">+1</span></div>
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:33.16858868753432%"></div></div>
+        <span class="vs-pct up">+16.6%</span>
+        <span class="tag-badge tb-red">溢價</span>
+      </div>
+    </div><div class="case-card premium" onclick="openModal(3)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">月理河</div>
+          <div class="cc-price red">42.29<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">得邑建設</span>
+          <span class="status-pill sp-new">新成屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--red)">26%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill red" style="width:26%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 45 / 170 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">堡立名廚豪山三機</span><span class="chip k">波蘭Amica洗碗機</span><span class="chip b">和成智慧型超級馬桶（全戶）</span></div>
+      <div class="cc-amenities"><span class="chip am">接待大廳</span><span class="chip am">交誼廳</span><span class="chip am">會議室</span><span class="chip am">空中花園</span><span class="chip am-more">+2</span></div>
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:32.23503569467324%"></div></div>
+        <span class="vs-pct up">+16.1%</span>
+        <span class="tag-badge tb-red">溢價</span>
+      </div>
+    </div><div class="case-card premium" onclick="openModal(2)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">敘青田</div>
+          <div class="cc-price red">41.03<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">興連城開發</span>
+          <span class="status-pill sp-pre">預售屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--red)">12%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill red" style="width:12%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 11 / 92 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">Miton廚具</span><span class="chip k">Glemgas爐具</span><span class="chip b">Roca衛浴</span></div>
+      
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:25.31576057111477%"></div></div>
+        <span class="vs-pct up">+12.7%</span>
+        <span class="tag-badge tb-red">溢價</span>
+      </div>
+    </div><div class="case-card premium" onclick="openModal(20)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">博市陞</div>
+          <div class="cc-price red">40.57<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">龍陞開發</span>
+          <span class="status-pill sp-new">新成屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--red)">38%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill red" style="width:38%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 36 / 94 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">資訊待補</span><span class="chip b">資訊待補</span></div>
+      
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:22.789676002196586%"></div></div>
+        <span class="vs-pct up">+11.4%</span>
+        <span class="tag-badge tb-red">溢價</span>
+      </div>
+    </div><div class="case-card premium warn" onclick="openModal(11)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">玉原道 ⚠</div>
+          <div class="cc-price amber">40.06<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">玉鎮建設</span>
+          <span class="status-pill sp-pre">預售屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--red)">99%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill red" style="width:99%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 69 / 70 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">資訊待補</span><span class="chip b">資訊待補</span></div>
+      
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:19.9890170236134%"></div></div>
+        <span class="vs-pct up">+10.0%</span>
+        <span class="tag-badge tb-red">溢價</span>
+      </div>
+    </div><div class="case-card normal" onclick="openModal(4)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">鳳凰萃</div>
+          <div class="cc-price amber">39.61<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">隆大建設</span>
+          <span class="status-pill sp-new">新成屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--amber)">16%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill amber" style="width:16%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 33 / 201 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">林內三機</span><span class="chip k">Panasonic廚櫃</span><span class="chip b">HCG雙免治</span></div>
+      <div class="cc-amenities"><span class="chip am">健身房</span><span class="chip am">KTV</span><span class="chip am">Lounge Bar</span><span class="chip am">接待大廳</span><span class="chip am-more">+5</span></div>
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:17.51784733662821%"></div></div>
+        <span class="vs-pct up">+8.8%</span>
+        <span class="tag-badge tb-amber">均值</span>
+      </div>
+    </div><div class="case-card normal" onclick="openModal(9)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">蒙瑪特</div>
+          <div class="cc-price amber">39.20<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">璞盛建築</span>
+          <span class="status-pill sp-new">新成屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--amber)">39%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill amber" style="width:39%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 13 / 33 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">德國品牌（待補）</span><span class="chip b">V&amp;B、GROHE五金（待補）</span></div>
+      
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:15.266337177375075%"></div></div>
+        <span class="vs-pct up">+7.6%</span>
+        <span class="tag-badge tb-amber">均值</span>
+      </div>
+    </div><div class="case-card normal" onclick="openModal(5)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">以學MDT</div>
+          <div class="cc-price amber">39.03<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">華友聯開發</span>
+          <span class="status-pill sp-pre">預售屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--amber)">8%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill amber" style="width:8%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 18 / 229 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">德國noblessa廚具</span><span class="chip k">SVAGO感應爐</span><span class="chip b">Villeroy&amp;Boch五金</span></div>
+      <div class="cc-amenities"><span class="chip am">健身房</span><span class="chip am">接待大廳</span><span class="chip am">交誼廳</span><span class="chip am">閱覽室</span><span class="chip am-more">+5</span></div>
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:14.332784184513999%"></div></div>
+        <span class="vs-pct up">+7.2%</span>
+        <span class="tag-badge tb-amber">均值</span>
+      </div>
+    </div><div class="case-card normal" onclick="openModal(6)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">冠傑Ai</div>
+          <div class="cc-price amber">38.90<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">冠傑建設</span>
+          <span class="status-pill sp-pre">預售屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--amber)">2%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill amber" style="width:2%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 5 / 231 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">義大利BEST除氯洗烘碗機</span><span class="chip b">INAX主浴</span></div>
+      
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:13.618890719384936%"></div></div>
+        <span class="vs-pct up">+6.8%</span>
+        <span class="tag-badge tb-amber">均值</span>
+      </div>
+    </div><div class="case-card normal" onclick="openModal(8)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">遠見禾悅</div>
+          <div class="cc-price amber">38.88<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">全誠建設</span>
+          <span class="status-pill sp-new">新成屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--amber)">39%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill amber" style="width:39%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 66 / 170 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">義大利Miton等級進口廚具</span><span class="chip b">INAX精品衛浴</span></div>
+      <div class="cc-amenities"><span class="chip am">健身房</span><span class="chip am">KTV</span><span class="chip am">視聽室</span><span class="chip am">接待大廳</span><span class="chip am-more">+6</span></div>
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:13.509060955518951%"></div></div>
+        <span class="vs-pct up">+6.8%</span>
+        <span class="tag-badge tb-amber">均值</span>
+      </div>
+    </div><div class="case-card normal" onclick="openModal(7)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">翊城晶綻</div>
+          <div class="cc-price amber">38.50<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">翊城建設</span>
+          <span class="status-pill sp-new">新成屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--amber)">22%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill amber" style="width:22%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 13 / 60 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">資訊待補</span><span class="chip b">資訊待補</span></div>
+      
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:11.42229544206479%"></div></div>
+        <span class="vs-pct up">+5.7%</span>
+        <span class="tag-badge tb-amber">均值</span>
+      </div>
+    </div><div class="case-card normal" onclick="openModal(10)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">行見築</div>
+          <div class="cc-price amber">38.27<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">居富建設</span>
+          <span class="status-pill sp-pre">預售屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--amber)">36%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill amber" style="width:36%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 46 / 129 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">BOSCH全嵌洗碗機</span><span class="chip k">Panasonic廚具</span><span class="chip b">Panasonic雙免治（全戶）</span></div>
+      <div class="cc-amenities"><span class="chip am">健身房</span><span class="chip am">接待大廳</span><span class="chip am">交誼廳</span><span class="chip am">閱覽室</span><span class="chip am-more">+3</span></div>
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:10.159253157605718%"></div></div>
+        <span class="vs-pct up">+5.1%</span>
+        <span class="tag-badge tb-amber">均值</span>
+      </div>
+    </div><div class="case-card normal warn" onclick="openModal(13)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">吉隆森淼 ⚠</div>
+          <div class="cc-price amber">37.40<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">吉隆建設</span>
+          <span class="status-pill sp-pre">預售屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--amber)">10%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill amber" style="width:10%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 16 / 157 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">櫻花三機</span><span class="chip b">TOTO免治</span></div>
+      
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:5.381658429434359%"></div></div>
+        <span class="vs-pct up">+2.7%</span>
+        <span class="tag-badge tb-amber">均值</span>
+      </div>
+    </div><div class="case-card discount" onclick="openModal(14)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">琢萃</div>
+          <div class="cc-price amber">34.95<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">協勝發建設</span>
+          <span class="status-pill sp-new">新成屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--green)">7%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill green" style="width:7%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 13 / 190 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">德國VB五金（待確認）</span><span class="chip b">資訊待補</span></div>
+      
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-neg" style="width:8.07248764415156%"></div></div>
+        <span class="vs-pct dn">-4.0%</span>
+        <span class="tag-badge tb-green">折價</span>
+      </div>
+    </div><div class="case-card discount" onclick="openModal(15)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">華雄交響曲</div>
+          <div class="cc-price green">33.34<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">華雄建設</span>
+          <span class="status-pill sp-new">新成屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--green)">97%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill green" style="width:97%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 122 / 126 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">櫻花廚具</span><span class="chip b">American Standard</span></div>
+      
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-neg" style="width:16.913783635365174%"></div></div>
+        <span class="vs-pct dn">-8.5%</span>
+        <span class="tag-badge tb-green">折價</span>
+      </div>
+    </div><div class="case-card discount" onclick="openModal(16)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">冠傑UI</div>
+          <div class="cc-price green">32.53<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">冠傑建設</span>
+          <span class="status-pill sp-new">新成屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--green)">97%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill green" style="width:97%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 184 / 190 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">義大利BEST洗烘碗機</span><span class="chip k">升降吊廚</span><span class="chip b">V&amp;B五金</span></div>
+      
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-neg" style="width:21.361889071938496%"></div></div>
+        <span class="vs-pct dn">-10.7%</span>
+        <span class="tag-badge tb-green">折價</span>
+      </div>
+    </div><div class="case-card discount" onclick="openModal(19)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">崑庭馥御</div>
+          <div class="cc-price green">31.62<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">崑庭建設</span>
+          <span class="status-pill sp-new">新成屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--green)">82%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill green" style="width:82%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 369 / 450 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">各期不一（E期以上林內三機）</span><span class="chip b">各期不同，H期HCG免治</span></div>
+      
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-neg" style="width:26.35914332784185%"></div></div>
+        <span class="vs-pct dn">-13.2%</span>
+        <span class="tag-badge tb-green">折價</span>
+      </div>
+    </div><div class="case-card discount" onclick="openModal(17)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">遠見峰悅</div>
+          <div class="cc-price green">31.47<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">全誠建設</span>
+          <span class="status-pill sp-new">新成屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--green)">98%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill green" style="width:98%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 312 / 318 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">歐化廚具（木紋耐磨）</span><span class="chip b">電腦免治馬桶（主臥）</span></div>
+      <div class="cc-amenities"><span class="chip am">健身房</span><span class="chip am">KTV</span><span class="chip am">接待大廳</span><span class="chip am">交誼廳</span><span class="chip am-more">+4</span></div>
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-neg" style="width:27.182866556836917%"></div></div>
+        <span class="vs-pct dn">-13.6%</span>
+        <span class="tag-badge tb-green">折價</span>
+      </div>
+    </div><div class="case-card discount" onclick="openModal(18)">
+      <div class="cc-head">
+        <div class="cc-top">
+          <div class="cc-name">之見築</div>
+          <div class="cc-price green">28.99<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
+        </div>
+        <div class="cc-meta">
+          <span class="cc-dev">居富建設</span>
+          <span class="status-pill sp-pre">預售屋</span>
+        </div>
+      </div>
+      <div class="cc-sold">
+      <div class="sold-label">
+        <span class="sold-l">售出率（實登/總戶）</span>
+        <span class="sold-pct" style="color:var(--green)">92%</span>
+      </div>
+      <div class="sold-bar"><div class="sold-fill green" style="width:92%"></div></div>
+      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 133 / 144 戶</div>
+    </div>
+      <div class="cc-chips"><span class="chip k">資訊待補</span><span class="chip b">資訊待補</span></div>
+      
+      <div class="cc-foot">
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-neg" style="width:40.80175727622187%"></div></div>
+        <span class="vs-pct dn">-20.4%</span>
+        <span class="tag-badge tb-green">折價</span>
+      </div>
+    </div></div>
 </div>
 
 <!-- MODAL -->
@@ -342,22 +893,237 @@ select.fil:focus{border-color:var(--border-dark)}
 <div id="toast"></div>
 
 <script>
-const FLOOR_PLANS = {
-  "高大之森": ["https://drive.google.com/thumbnail?id=1P6N6lCsW0ISvxqWqktQKTTxUbqst3xUv&sz=w1200", "https://drive.google.com/thumbnail?id=1XSYdxd20aq_K14dPkCHV2FGz4xlcAi8m&sz=w1200", "https://drive.google.com/thumbnail?id=13cw96hmqrwoe4Jp42XWFG-WZOwuUMyM5&sz=w1200", "https://drive.google.com/thumbnail?id=1LUKTk-A44dQe3TLc7GbUcLXRhnB8jpdr&sz=w1200", "https://drive.google.com/thumbnail?id=1Nlt4UIJTls7efzPb9cJ0loGs08-Gb-Mj&sz=w1200", "https://drive.google.com/thumbnail?id=1tTKgfwZNefjTtW9CcNBKfS3cTJIfMrNu&sz=w1200", "https://drive.google.com/thumbnail?id=1_fCt2QM5RSoye3OWE1SopwoO4yMKwykI&sz=w1200", "https://drive.google.com/thumbnail?id=1gQxEJ46GHGq9ajg-5U_26gymbhcoUwig&sz=w1200"],
-  "冠傑Ai": ["https://drive.google.com/thumbnail?id=1ntHbNzMojXZayuqbox62dAI6mH46ftkw&sz=w1200", "https://drive.google.com/thumbnail?id=1VefZgWGtOpRxka_VD2pWlzMsgNYz_eos&sz=w1200", "https://drive.google.com/thumbnail?id=1bsZf8IlGw0yALJruxN-KZ5ONKInmXWRl&sz=w1200", "https://drive.google.com/thumbnail?id=1ePESF5G4XBQG08W9ZS8NT064uR-u4bjI&sz=w1200", "https://drive.google.com/thumbnail?id=1o-G_9s_0ZvJdOTYKQAUkWdu6HiZXZvu7&sz=w1200", "https://drive.google.com/thumbnail?id=1R1YZPuC1ALZQCZ62GarXatAMCkWbV401&sz=w1200", "https://drive.google.com/thumbnail?id=1TvwTD7KoBKzUbYPS5AO-zX6Wj4Fy-pnF&sz=w1200", "https://drive.google.com/thumbnail?id=1zhNaUnqoWnedQ9Yu_FWQppj8Skspfyzq&sz=w1200"],
-  "遠見禾悅": ["https://drive.google.com/thumbnail?id=1LE9kXP68UkRq3UctWOQT5XEPMjVV3OVs&sz=w1200", "https://drive.google.com/thumbnail?id=1GWnqUY6UAhS7ZjDnM_InyY3wawTVI2Qt&sz=w1200", "https://drive.google.com/thumbnail?id=1G_jQ2racwsXLCvKi4zGnssWCWjiXeucW&sz=w1200", "https://drive.google.com/thumbnail?id=17zPpQQyvDa6dB10Qm8VWHkCnYHhl6DM9&sz=w1200", "https://drive.google.com/thumbnail?id=1eE5-tJGAaqUVwbZlBv9rcpEz3GttRlf8&sz=w1200", "https://drive.google.com/thumbnail?id=1wHutdJHfVhTJs6e9ZR7qVlcK3ax9Ncy5&sz=w1200", "https://drive.google.com/thumbnail?id=1jPlOFiyvqSSsaRQyfgVAvFP0kHxVwQvr&sz=w1200", "https://drive.google.com/thumbnail?id=12eezR-BrIG28CP7Oyy7ah3ejT9KRAOF8&sz=w1200"],
-  "崑庭馥御": ["https://drive.google.com/thumbnail?id=16dfvCWSh2aZ6g3y8Yrpb7gh_Hj9F6Oaj&sz=w1200", "https://drive.google.com/thumbnail?id=19uD9W_vXxvARWOAOzeJhNPKIUgqzgx-g&sz=w1200", "https://drive.google.com/thumbnail?id=1cx6SSkYTxvQAET8W-2xsswdVXHcmBsCL&sz=w1200", "https://drive.google.com/thumbnail?id=1jNkrGtpd-PM06II8OiSLpTKtjdp1ivx6&sz=w1200", "https://drive.google.com/thumbnail?id=1D1LNz1oD-cEQnRp8HO6J4VSiZwb1jPBL&sz=w1200", "https://drive.google.com/thumbnail?id=1Dpty1oc4doBc3TGR0s1vdJseq1FrYXXH&sz=w1200", "https://drive.google.com/thumbnail?id=1TBWSsoqtvUvDemMfoow3uLUAureftNz0&sz=w1200", "https://drive.google.com/thumbnail?id=1kA0ynJFZ12PPn6Bz6nZ_1SebwFUZL0mH&sz=w1200"],
-  "敘青田": ["https://drive.google.com/thumbnail?id=1wtaPCdM9klLIY3gt2-jjA1hqMida4HQ0&sz=w1200", "https://drive.google.com/thumbnail?id=17st0_l46Yep7P7isdTD0r8pLElZykIKy&sz=w1200", "https://drive.google.com/thumbnail?id=1aK2QvzWwtF8m8zo32uQEWoNkFvYVPbnq&sz=w1200", "https://drive.google.com/thumbnail?id=1ktG7lGENrvpb5taFNDxbDw7HbbExnrMP&sz=w1200", "https://drive.google.com/thumbnail?id=1Mpo5pLcZXsS3qV7Ue6oXSQKz_2SC0yQ2&sz=w1200", "https://drive.google.com/thumbnail?id=1QkmHNiG9yA8vq8KyxSWJvhUnwqxVKwEk&sz=w1200", "https://drive.google.com/thumbnail?id=1jNRgWqHxQxhTv6kiG65eY4lVd4FyB_sL&sz=w1200", "https://drive.google.com/thumbnail?id=1K5WLLI9RPB0HpGdrZ08CZor9R3VGHh-s&sz=w1200", "https://drive.google.com/thumbnail?id=1UfT90y4s3mXSi9gkLbI_12AG06-TnVp5&sz=w1200", "https://drive.google.com/thumbnail?id=1UOiTqMFDcrY1QW6baWFnqkbn3hkKdBeN&sz=w1200", "https://drive.google.com/thumbnail?id=1fDb4dMgbhRLlJAHXtuLdVx7mMH0PMsGd&sz=w1200"],
-  "月理河": ["https://drive.google.com/thumbnail?id=1POdagGK_GAcpIZe8s2e-YvIuz7fQl2Xq&sz=w1200", "https://drive.google.com/thumbnail?id=1UR0pFBgXRKJnP6HspRviLgREa8Gq4W6t&sz=w1200", "https://drive.google.com/thumbnail?id=19YbRBeD99WjMgEjH7aro8tVIclk1MeMv&sz=w1200", "https://drive.google.com/thumbnail?id=1qNTJo_XJfSDKDMj21S2yBFurkyrEVUM5&sz=w1200", "https://drive.google.com/thumbnail?id=1llwlFu2OknVr5ZsM1tgNUJ3olvOkhnRS&sz=w1200", "https://drive.google.com/thumbnail?id=1G56kheKbx103WEGI6dYlYbx16-wEgQyw&sz=w1200", "https://drive.google.com/thumbnail?id=1PSAlaxW4pbRiGFYDFBmNGwSvCSNnmof3&sz=w1200", "https://drive.google.com/thumbnail?id=1amJg1qd3exsNp3TUt1_AXmtoXOIOnNrY&sz=w1200"],
-  "行見築": ["https://drive.google.com/thumbnail?id=1jfqK0eHGAyqic8VhrYERhLtfMyIWKKAO&sz=w1200", "https://drive.google.com/thumbnail?id=1b_1wBwgF89ioej4X0GyruhZEiWRRtrso&sz=w1200", "https://drive.google.com/thumbnail?id=1BkGuvABuLk1n0-yz2RnF3FJIT5NXEh43&sz=w1200", "https://drive.google.com/thumbnail?id=1UCo34uJHaPMvcTledjRcCOGXp2hVNSCf&sz=w1200", "https://drive.google.com/thumbnail?id=1MDoUJs9jGK27MIIOeSohZPNvboTafTs3&sz=w1200", "https://drive.google.com/thumbnail?id=1OaGQbXsBkPXyiYUos1T_-Xt3qs0Qzm0_&sz=w1200", "https://drive.google.com/thumbnail?id=1OujV8B8tmvhrmABvKpPxL1mgu1cZZpZc&sz=w1200", "https://drive.google.com/thumbnail?id=1urX3Til7_n-UKjloeCTOxXEX0Kp25VQC&sz=w1200"],
-  "蒙瑪特": ["https://drive.google.com/thumbnail?id=1KCWw-4QUmy3w7sxXK6RbuCSHjdkHBlLP&sz=w1200", "https://drive.google.com/thumbnail?id=1elNY1GEVg4koOLDZyofZta1vQ6Wp5UAw&sz=w1200", "https://drive.google.com/thumbnail?id=10bw7-YN8MZqs85Vssxn3nvMn3DI1qrmx&sz=w1200", "https://drive.google.com/thumbnail?id=1uT1XGHKDYZrtc55OPBESfBLzo-mxx6mI&sz=w1200", "https://drive.google.com/thumbnail?id=1JL8lbjkanXRhPWj2RxtpXnqBxFwEEgKN&sz=w1200", "https://drive.google.com/thumbnail?id=1rNvOmtMLTlkKHR4laFa7OiW_es3B5xAL&sz=w1200", "https://drive.google.com/thumbnail?id=1vBRMpeDp45eFIdcCIzT9J63YsAGyFNm1&sz=w1200", "https://drive.google.com/thumbnail?id=1lZljr8gHRHKVYeWKKiwUpI5OfyXLAJFp&sz=w1200"],
-  "翊城晶綻": ["https://drive.google.com/thumbnail?id=1agJFCANN9is4xFnAtOOOONBAnILdlefT&sz=w1200", "https://drive.google.com/thumbnail?id=1FuW29oD-QqaxqwyqCCtcKS0NLU6Zkm1_&sz=w1200", "https://drive.google.com/thumbnail?id=1R9SHMNMG_4JJtfmr1uG1SU9mpJZ1evPy&sz=w1200", "https://drive.google.com/thumbnail?id=1WN3nJlZ-3HvClsFbRn5Hm5SfM0ou2HwD&sz=w1200", "https://drive.google.com/thumbnail?id=1WwYTgQ4p2AJBKwEc1_PkTzt2kh28AnSV&sz=w1200", "https://drive.google.com/thumbnail?id=1kkAha98z1pQC2UBUCqrJPvWVQGKHYsHU&sz=w1200"],
-  "華雄交響曲": ["https://drive.google.com/thumbnail?id=1eiG4r18PFt0DypINsjWRhDQA37TH9nt3&sz=w1200", "https://drive.google.com/thumbnail?id=11tPDsSO2gWIjee3cJdvKfcuxaFZDIUAc&sz=w1200", "https://drive.google.com/thumbnail?id=1B-P2gFhgxQcPvMqENpgKTmF-fj8_whLl&sz=w1200", "https://drive.google.com/thumbnail?id=1q7-Xc_4HONz2XKNeHpe6dfZMCsmexzag&sz=w1200", "https://drive.google.com/thumbnail?id=1eSfSRZQWwLVgLXQGYssN_Xc_hvW0wEA-&sz=w1200", "https://drive.google.com/thumbnail?id=1Bkhd_bWP-_Rp2eYq6XVFqUbDkrO9pEdV&sz=w1200", "https://drive.google.com/thumbnail?id=1Rn5JeOKpZpQdBZZTs5C_8CthnnKhPG1_&sz=w1200", "https://drive.google.com/thumbnail?id=1Y48LvM9vaATKdRHR5p6K7xQt1cvcw16t&sz=w1200"],
-  "鳳凰萃": ["https://drive.google.com/thumbnail?id=1hSNQhX2zE80ID9KnOjXhcFIGKOTmQvkh&sz=w1200", "https://drive.google.com/thumbnail?id=1Oq7Sv7IzBL7_h-9-VX7CnCk-rLW4JnFR&sz=w1200", "https://drive.google.com/thumbnail?id=11tctkurh1dLXFRc5N9GM8_6ZRBcOHERV&sz=w1200", "https://drive.google.com/thumbnail?id=1HEeqCQV1QO7PQS_rKFhDfa2UPT1WJf_2&sz=w1200", "https://drive.google.com/thumbnail?id=1rb1b3He40psd7B-Lzt0zgxAFkKrR1nr4&sz=w1200", "https://drive.google.com/thumbnail?id=1jLd9UHWDlWgfy8XjQ8_NpR_9udOz2-9o&sz=w1200", "https://drive.google.com/thumbnail?id=1hmrXNrvS5J9HqndpmcJEuQalaZf4aR_5&sz=w1200", "https://drive.google.com/thumbnail?id=11HhgvU5Zsc7Yn9iYi4tOo0hCScvzlXzM&sz=w1200"],
-  "遠雄一靚": ["https://drive.google.com/thumbnail?id=1qc4BBOXM486j0n58erRwl_qzFmpMvMUc&sz=w1200", "https://drive.google.com/thumbnail?id=1AxLZMulrplMfYM3usXJuipUfXAL7o-kF&sz=w1200", "https://drive.google.com/thumbnail?id=1pAbN31zT3v-_ZfMyz5fcRIrnwAl73Z5U&sz=w1200", "https://drive.google.com/thumbnail?id=1_PnTBDl6Pknx08UVlOEvXM4HRUtRU6cq&sz=w1200", "https://drive.google.com/thumbnail?id=1niUoKLX5doqeS1XGOOZxZumByOgZs12q&sz=w1200", "https://drive.google.com/thumbnail?id=1phFxg74jG4wnlGdtt6n6S8bXezEfiH5v&sz=w1200", "https://drive.google.com/thumbnail?id=1uabwY68jdctD-FfNAo5Gg56cX5MNC1l8&sz=w1200", "https://drive.google.com/thumbnail?id=14KWvBfUGdKsQS1x4JJ6cDI5LGkT4SraS&sz=w1200"],
-  "博市陞": ["https://drive.google.com/thumbnail?id=1aj6-4ymP1mM0GgecGwn5I5ma-zVXOTKb&sz=w1200", "https://drive.google.com/thumbnail?id=1cZGcjktjObjsWMJnw8wZJUW5nSZL4XbG&sz=w1200", "https://drive.google.com/thumbnail?id=1tGQ11BFZ_PqKVdkh7DRjHADqEEbFuwTl&sz=w1200", "https://drive.google.com/thumbnail?id=1REmGBTSsCua0Nf1Ta4eKJgBZlFck77ZV&sz=w1200", "https://drive.google.com/thumbnail?id=123Cnua5Xj5dUVRJ55HlQwNB1iYrvY821&sz=w1200", "https://drive.google.com/thumbnail?id=1EvUePrkcrOA3--nWcoKmRwC1giRz2Kl2&sz=w1200", "https://drive.google.com/thumbnail?id=18uOozheYf4GVsAEgmyP9kZytqcsEKahW&sz=w1200", "https://drive.google.com/thumbnail?id=1WHaZNTfQNX8IwuDU6k_wk9iJYGclxx4-&sz=w1200"],
-  "以學MDT": ["https://drive.google.com/thumbnail?id=1XfpFCarsdPSxJNqMiHdaOa9IpP8q8U5w&sz=w1200", "https://drive.google.com/thumbnail?id=1Xa6pZuC7k05E94SP1_KxYQKf0Lp7g_r5&sz=w1200", "https://drive.google.com/thumbnail?id=1MEDQHy-WGGDP4FE-3pjdQCeQgTbYtCfb&sz=w1200", "https://drive.google.com/thumbnail?id=1npgMHm8eXxqoqcEp1mtFh9YXNwKSwALZ&sz=w1200", "https://drive.google.com/thumbnail?id=12rTwP2AO7tt077GrR_H8L0Zg1iFb7IoY&sz=w1200", "https://drive.google.com/thumbnail?id=1q-XvPjIWVU7jhyh-JwLkIyLbfxIZhIY9&sz=w1200", "https://drive.google.com/thumbnail?id=1U-_1a1UKGY_FS8wgjPhtVmhv6H_jWFSg&sz=w1200", "https://drive.google.com/thumbnail?id=1S3xNpM4MgDBkgV4dg7rQxrnUpCF25cso&sz=w1200"],
-};
+const projects = [
+  {name:'高大之森', dev:'中德建設（茂德）', status:'預售屋',
+    addr:'楠海路（近藍田路）vs大學三十一街', permit:'112高市工建01079號', floor:'15F/B4',
+    avgPrice:50.30, minPrice:35.47, maxPrice:53.40, count:331, units:362,
+    layout:'A.B棟15層；2房(17~28坪)／3房(33~36坪)',
+    r2:56, r3:44, r4:0, loan:'80%', handover:'2026Q3',
+    kit:['櫻花全套廚具','廚下熱飲機'], bath:['TOTO全系列雙免治（全戶）'],
+    other:['德國BWT軟水','3M全棟淨水','長庚活水','日立永大電梯','GreenWeb防霾紗窗','一期已完銷'],
+    amenities:{'運動健身':['健身房','瑜伽教室'],'休閒娛樂':['KTV','Lounge Bar','視聽室'],'休閒社交':['接待大廳','交誼廳','閱覽室'],'兒童親子':['兒童遊戲區','親子遊戲區'],'景觀綠化':['中庭花園','空中花園'],'生活機能':['信箱區','曬被區','廚藝教室']},
+    notes:'此案為高大之森一期，二期為「高大之森2・高大之上」。基地1345.5坪／建蔽率39.74%。承優營造、大瀚建築師。',
+    analysis:'全區成交量No.1（331筆）。你指定以 50.3 作為主均價（未交屋、近完銷）。',
+    tag:'premium', lat:22.722786, lng:120.275654, s591:'https://newhouse.591.com.tw/134280/detail'},
+
+  {name:'高大之森2・高大之上', dev:'中德建設', status:'預售屋',
+    addr:'大學南路（藍田西段12等地號）', permit:'114高市工建00763號', floor:'20F/B3',
+    avgPrice:43.13, minPrice:40.81, maxPrice:46.02, count:35, units:314,
+    layout:'2棟20層；2房(20~27坪)／3房(33~34坪)；全平面309位',
+    r2:40, r3:60, r4:0, loan:'75%', handover:'2028下半年',
+    kit:['櫻花廚具'], bath:['TOTO衛浴','Hansgrohe龍頭','Panasonic四合一暖風'],
+    other:['人臉辨識電子鎖','Honeywell空清','日立永大電梯','BWT軟水','長庚活水','德國Classen木地板'],
+    amenities:{'休閒社交':['接待大廳','交誼廳','閱覽室','視聽室'],'兒童親子':['兒童遊戲區'],'景觀綠化':['中庭花園','空中花園'],'生活機能':['信箱區','曬被區']},
+    notes:'公設比35.8%／建蔽率33.66%／基地1253.51坪。中德建設、承優營造，大瀚建築師事務所。工程零付款方案。',
+    analysis:'20樓校園首排地標，大學南路面對25萬坪高大校園，314戶純住家，建材達輕豪宅等級。',
+    tag:'premium', lat:22.730950, lng:120.280611, s591:'https://newhouse.591.com.tw/139790/detail'},
+
+  {name:'遠雄一靚', dev:'遠雄建設', status:'預售屋',
+    addr:'大學二十三街vs大學二十六街', permit:'114高市工建00322號', floor:'20F/B3',
+    avgPrice:42.46, minPrice:38.37, maxPrice:50.33, count:61, units:461,
+    layout:'A.B.D三棟20層；2房(22~26坪)／3房(33~36坪)；全平面480位',
+    r2:55, r3:45, r4:0, loan:'70%', handover:'2029Q3',
+    kit:['建材待補（預售屋未完整公布）'], bath:['建材待補'],
+    other:['遠雄555安心保固（結構25年/防水5年/地壁磚5年）','全平面480位','公設比36%'],
+    amenities:{'景觀綠化':['森林大門退縮景觀','空中綠意陽台','中庭綠境'],'生活機能':['接待大廳','EV充電（480位）']},
+    notes:'公設比36%／建蔽率28.99%／基地2432坪。林子森林伯諭聯合建築師。貸款僅70%（全區最嚴）。',
+    analysis:'品牌信譽最強，換約流動性最佳。貸款僅70%，自備款需求高。',
+    tag:'premium', lat:22.729602, lng:120.280209, s591:'https://newhouse.591.com.tw/139855/detail'},
+
+  {name:'敘青田', dev:'興連城開發', status:'預售屋',
+    addr:'大學十一街vs大學二十六街', permit:'113高市工建01378號', floor:'14F/B3',
+    avgPrice:41.03, minPrice:38.47, maxPrice:44.13, count:11, units:92,
+    layout:'A棟14層；2房(20~28坪)／3房(33~41坪)',
+    r2:40, r3:60, r4:0, loan:'80%', handover:'2028Q4',
+    kit:['Miton廚具','Glemgas爐具'], bath:['Roca衛浴'],
+    other:['柱中柱耐震系統','藍田公園第一排','精品小社區92戶','管費85元'],
+    notes:'公設比未公布／建蔽率42.99%／基地489.9坪。原東聯合建築師。',
+    analysis:'藍田公園首排，柱中柱耐震規格高。11筆成交代表性中等。',
+    tag:'premium', lat:22.729416, lng:120.287113, s591:'https://newhouse.591.com.tw/139504/detail'},
+
+  {name:'博市陞', dev:'龍陞開發', status:'新成屋',
+    addr:'大學二十九路568號', permit:'109高市工建00996號', floor:'15F/B2',
+    avgPrice:40.57, minPrice:36.70, maxPrice:42.00, count:36, units:94,
+    layout:'單棟15層；2房(20.46~20.64坪)／3房(31.61~34.87坪)；平面33+機械37位',
+    r2:65, r3:35, r4:0, loan:'80%', handover:'已完工',
+    kit:['資訊待補'], bath:['資訊待補'],
+    other:['Alfa Safe柱中柱耐震','台泥混凝土','三菱電梯','EMS電動車系統','防水保固5年'],
+    notes:'公設比35%／建蔽率29.55%／基地458.71坪。原東聯合建築師。日祥營造。',
+    analysis:'94戶精品小社區，耐震規格高。均價40.57萬達溢價門檻。',
+    tag:'premium', lat:22.729644, lng:120.275567, s591:'https://newhouse.591.com.tw/136422/detail'},
+
+  {name:'鳳凰萃', dev:'隆大建設', status:'新成屋',
+    addr:'大學二十六街', permit:'-', floor:'15F/B2',
+    avgPrice:39.54, minPrice:37.83, maxPrice:42.36, count:33, units:201,
+    layout:'A.B棟15層；2房(~22坪)／3房(~34坪)／2+1房',
+    r2:73, r3:21, r4:6, loan:'80%', handover:'已完工',
+    kit:['林內三機','Panasonic廚櫃'], bath:['HCG雙免治','Panasonic暖風'],
+    other:['防水保固10年','冠軍磁磚'],
+    amenities:{'運動健身':['健身房'],'休閒娛樂':['KTV','Lounge Bar'],'休閒社交':['接待大廳','交誼廳'],'景觀綠化':['空中花園'],'生活機能':['信箱區','曬被區','EV充電預留']},
+    analysis:'2房73%投資導向。防水保固10年罕見。',
+    tag:'normal', lat:22.729691, lng:120.282784, s591:null},
+
+  {name:'蒙瑪特', dev:'璞盛建築', status:'新成屋',
+    addr:'大學二十二街52~60號', permit:'-', floor:'9F/B2',
+    avgPrice:39.14, minPrice:37.90, maxPrice:40.38, count:13, units:33,
+    layout:'單棟9層；2房(23坪)／2+1房(29坪)／3房(37坪)',
+    r2:50, r3:50, r4:0, loan:'80%', handover:'已完工',
+    kit:['德國品牌（待補）'], bath:['V&B、GROHE五金（待補）'],
+    other:['33戶純住宅','戶戶邊間','衛浴皆開窗','步行3分至高大'],
+    notes:'原 HTML「拓真」案實際為「蒙瑪特」，地址樓層戶數均價全部錯誤。璞盛/宇富建設。',
+    analysis:'33戶迷你精品，戶戶邊間衛浴開窗。',
+    tag:'normal', lat:22.725971, lng:120.281188, s591:'https://newhouse.591.com.tw/139600/detail'},
+
+  {name:'遠見禾悅', dev:'全誠建設', status:'新成屋',
+    addr:'大學南路168號', permit:'-', floor:'15F/B2',
+    avgPrice:38.79, minPrice:36.98, maxPrice:40.74, count:66, units:170,
+    layout:'A.B.D三棟15層；全3房規劃(34~49坪)；單層4戶雙梯',
+    r2:0, r3:100, r4:0, loan:'80%', handover:'已完工',
+    kit:['義大利Miton等級進口廚具'], bath:['INAX精品衛浴'],
+    other:['公設比34%','全3房配置（區域唯一）','戶戶邊間雙梯'],
+    amenities:{'運動健身':['健身房'],'休閒娛樂':['KTV','視聽室'],'休閒社交':['接待大廳','交誼廳'],'兒童親子':['親子遊戲區'],'景觀綠化':['中庭花園','空中花園'],'生活機能':['信箱區','曬被區']},
+    analysis:'純3房、低公設、戶戶邊間。',
+    tag:'normal', lat:22.732190, lng:120.294212, s591:'https://newhouse.591.com.tw/137479/detail'},
+
+  {name:'百達悠悅', dev:'友友地產', status:'新成屋',
+    addr:'大學二十二街19號', permit:'109高市工建築字第01988-01號', floor:'15F/B3',
+    avgPrice:38.71, minPrice:37.13, maxPrice:40.71, count:4, units:114,
+    layout:'2房(27.42坪)／3房(32.53~41.75坪)／3+1房(42.16~43.37坪)；全平面104位',
+    r2:30, r3:60, r4:10, loan:'80%', handover:'隨時交屋',
+    kit:['Panasonic廚具','BOSCH洗碗機'], bath:['美標衛浴','INAX','ROCA'],
+    other:['鑄鋁門','EMS系統','全棟淨軟水','近藍田公園','家樂福2分鐘'],
+    amenities:{'休閒社交':['接待大廳','交誼廳','會議室','廚藝教室'],'運動健身':['健身房'],'兒童親子':['兒童遊戲區'],'景觀綠化':['空中花園']},
+    notes:'基地629.46坪／建蔽率37.31%／公設比36%。使用執照為(113)高市工建築使字第00513號。',
+    analysis:'依你的補充：扣除早期預售轉登紀錄後，近一年成屋行情站上38+。',
+    tag:'normal', lat:22.725120, lng:120.282910, s591:'https://newhouse.591.com.tw/135968/detail'},
+
+  {name:'月理河', dev:'得邑建設', status:'新成屋',
+    addr:'德中路1號（援中段二小段61地號）', permit:'110高市工建02428號', floor:'15F/B3',
+    avgPrice:38.85, minPrice:31.01, maxPrice:42.91, count:45, units:172,
+    layout:'A.B棟15層；2房(23.73~26.03坪)／3房(31.90~38.74坪)；平面130+機械44位',
+    r2:33, r3:67, r4:0, loan:'80%', handover:'已完工',
+    kit:['堡立名廚豪山三機','波蘭Amica洗碗機','Amica IH感應爐','日本KVK花灑'],
+    bath:['和成智慧型超級馬桶（全戶）'],
+    other:['德國太格隔音地板','BWT全棟淨水','5+5膠合超鋁氣密窗','後勁溪水岸第一排'],
+    amenities:{'休閒社交':['接待大廳','交誼廳','會議室'],'景觀綠化':['空中花園'],'生活機能':['信箱區','曬被區']},
+    notes:'（此案原本 avgPrice=42.29 為舊數字；你要以樂居近一年均價當主軸的話，已改成 38.85）',
+    analysis:'水岸景觀稀缺，公設比相對低。',
+    tag:'normal', lat:22.721025, lng:120.279742, s591:'https://newhouse.591.com.tw/137113/detail'},
+
+  {name:'翊城晶綻', dev:'翊城建設', status:'新成屋',
+    addr:'大學十六街298號', permit:'-', floor:'13F/B3',
+    avgPrice:38.46, minPrice:37.20, maxPrice:40.13, count:13, units:60,
+    layout:'A棟13層；2房(26.18~28.24坪)／3房(36.31~36.59坪)',
+    r2:60, r3:40, r4:0, loan:'80%', handover:'已完工',
+    kit:['資訊待補'], bath:['資訊待補'],
+    other:['基地323.28坪','1:2.5低梯戶比','戶戶邊間','純住宅60戶'],
+    notes:'原 HTML 標15F、地址「高大商圈」皆錯誤。實為13F、大學十六街298號。',
+    analysis:'60戶迷你純住宅，低梯戶比。',
+    tag:'normal', lat:22.727332, lng:120.283848, s591:'https://newhouse.591.com.tw/138413/detail'},
+
+  {name:'以學MDT', dev:'華友聯開發', status:'預售屋',
+    addr:'大學西路（近大學六十街）', permit:'110高市工建02835號', floor:'15F/B3',
+    avgPrice:39.03, minPrice:36.75, maxPrice:46.05, count:18, units:229,
+    layout:'A.B棟單層4戶2梯／D棟單層8戶3梯；2房(25~26)／3房(33~38)／4房(45~49)；全平面257位',
+    r2:22, r3:65, r4:13, loan:'80%', handover:'2027Q4',
+    kit:['德國noblessa廚具','SVAGO感應爐','BOSCH全嵌洗碗機'],
+    bath:['Villeroy&Boch五金','Panasonic暖風'],
+    other:['LOW-E膠合玻璃','3M除氯淨水','日本三井MITSUI公設','229戶零店面','管費75元（全區最低）'],
+    amenities:{'運動健身':['健身房'],'休閒社交':['接待大廳','交誼廳','閱覽室'],'兒童親子':['兒童遊戲區'],'景觀綠化':['三重綠意景觀','空中花園'],'生活機能':['信箱區','EV充電預留']},
+    notes:'公設比36%／建蔽率28.8%／基地1513坪／管費75元。許堅倚建築師。',
+    analysis:'高雄大學首排綠景，自住客接受度高。',
+    tag:'normal', lat:22.732979, lng:120.275128, s591:'https://newhouse.591.com.tw/139856/detail'},
+
+  {name:'冠傑Ai', dev:'冠傑建設', status:'預售屋',
+    addr:'大學十街近大學東路', permit:'109高市工建00940號', floor:'15F/B3',
+    avgPrice:39.01, minPrice:38.62, maxPrice:42.00, count:5, units:231,
+    layout:'2棟15層；2房(24~29坪)／3房(30~41坪)；平面189+機械28位',
+    r2:60, r3:40, r4:0, loan:'80%', handover:'待定',
+    kit:['義大利BEST除氯洗烘碗機'], bath:['INAX主浴','TOTO次浴','V&B五金'],
+    other:['紅磚隔間','ERIE淨軟水系統','公設比36.8%','基地1055坪'],
+    notes:'預售成交筆數少，代表性偏低。',
+    analysis:'規格穩定，位置條件需看客群偏好。',
+    tag:'normal', lat:22.726062, lng:120.290188, s591:'https://newhouse.591.com.tw/139219/detail'},
+
+  {name:'行見築', dev:'居富建設', status:'預售屋',
+    addr:'大學三十二街vs大學七街', permit:'110高市工建02726號', floor:'15F/B3',
+    avgPrice:38.27, minPrice:36.14, maxPrice:40.83, count:46, units:129,
+    layout:'A.B棟15層；2房(26坪)／3房(33~40坪)／4房(47~48坪)',
+    r2:40, r3:38, r4:22, loan:'80%', handover:'2030Q4',
+    kit:['BOSCH全嵌洗碗機','Panasonic廚具'], bath:['Panasonic雙免治（全戶）'],
+    other:['BWT全棟淨水','全熱交換器','一樓4.7米','全平面138位','管費80元'],
+    amenities:{'運動健身':['健身房'],'休閒社交':['接待大廳','交誼廳','閱覽室','棋藝室'],'娛樂才藝':['鋼琴教室'],'生活機能':['信箱區']},
+    analysis:'自住型規劃，成交量相對可參考。',
+    tag:'normal', lat:22.730988, lng:120.289325, s591:'https://newhouse.591.com.tw/138788/detail'},
+
+  {name:'吉隆森淼', dev:'吉隆建設', status:'預售屋',
+    addr:'德民路758號', permit:'110高市工建02971-01號', floor:'15F/B4',
+    avgPrice:37.40, minPrice:36.28, maxPrice:38.69, count:16, units:157,
+    layout:'單棟15層；2房(26~32坪)／2+1房(29~30坪)／3房(32~45坪)；平面169位',
+    r2:25, r3:65, r4:10, loan:'80%', handover:'2026Q4',
+    kit:['櫻花三機'], bath:['TOTO免治'],
+    other:['贈大金全屋冷氣（全戶）','Weber隔音地墊','右昌森林公園步行2分','EMS充電系統'],
+    notes:'⚠ 屬楠梓加工區生活圈，非高大特區核心。',
+    analysis:'贈冷氣是賣點，客群會比較在意地段。',
+    tag:'normal', warn:true, lat:22.722123, lng:120.293271, s591:'https://newhouse.591.com.tw/139815/detail'},
+
+  {name:'芳崗河左岸', dev:'芳崗建設', status:'新成屋',
+    addr:'援中路二巷8號', permit:'108高市工建築字第00502-02號', floor:'15F/B3',
+    avgPrice:35.55, minPrice:33.25, maxPrice:37.34, count:8, units:112,
+    layout:'2房(29.19~31.02坪)／3房(36.89~41.66坪)／3+1房(49.78~52.13坪)；平面110位',
+    r2:40, r3:50, r4:10, loan:'80%', handover:'隨時交屋',
+    kit:['林內雙口爐','喜特麗烘碗機','喜特麗電子鍋收納櫃','GlemGas微波烤箱'], bath:['美標衛浴','康乃馨四合一暖風機'],
+    other:['中華鋁門窗','亞爾浦軟水','耶魯電子鎖','後勁溪親水公園首排'],
+    amenities:{'休閒社交':['接待大廳','交誼廳','閱覽室','廚藝教室'],'運動健身':['健身房','瑜伽教室'],'生活機能':['信箱區','曬被區']},
+    notes:'基地772.74坪／建蔽率32.39%／公設比36%／管理費70元。使照為(113)高市工建築使字第00945號。',
+    analysis:'水岸棟距＋景觀優勢，性價比取向。',
+    tag:'normal', lat:22.722950, lng:120.288540, s591:'https://market.591.com.tw/5950631'},
+
+  {name:'琢萃', dev:'協勝發建設', status:'新成屋',
+    addr:'高雄大學路506號', permit:'-', floor:'15F/B3',
+    avgPrice:34.98, minPrice:32.00, maxPrice:38.00, count:13, units:190,
+    layout:'A.B兩棟15層；2房(24~25坪)／3房(39坪)／4房(49~50坪)／2+1房(33~40坪)',
+    r2:30, r3:35, r4:25, loan:'80%', handover:'已完工',
+    kit:['德國VB五金（待確認）'], bath:['資訊待補'],
+    other:['基地1123.83坪','203個車位','協勝發30年品牌','藍田雙語國小旁'],
+    notes:'2026/4全新完工，近一年均價約35萬。',
+    analysis:'品牌案＋新完工，若以「可立即交屋」客群是強對照。',
+    tag:'discount', lat:22.730970, lng:120.285063, s591:'https://newhouse.591.com.tw/140264/detail'},
+
+  {name:'崑庭馥御', dev:'崑庭建設', status:'新成屋',
+    addr:'大學五十六街53號', permit:'-', floor:'多期多棟',
+    avgPrice:34.12, minPrice:28.42, maxPrice:36.84, count:369, units:450,
+    layout:'多期多棟；2房(25~28)／3房(29~40)／4房(45+)',
+    r2:40, r3:45, r4:15, loan:'80%', handover:'各期不同',
+    kit:['各期不一（E期以上林內三機）'], bath:['各期不同，H期HCG免治'],
+    other:['多期累積大量戶數','各期規格差異大','議價空間大'],
+    notes:'多期規格差異大，需確認期別。',
+    analysis:'量體大、成交多，屬「市場基準盤」角色。',
+    tag:'discount', lat:22.729506, lng:120.276683, s591:'https://newhouse.591.com.tw/130646/detail'},
+
+  {name:'辰旭', dev:'永信建設', status:'新成屋',
+    addr:'大學一街132號', permit:'110高市工建築字第01878-04號', floor:'25F/B3',
+    avgPrice:34.04, minPrice:32.44, maxPrice:37.15, count:15, units:96,
+    layout:'3房(46坪)／4房(53坪)；全平面103位',
+    r2:0, r3:70, r4:30, loan:'80%', handover:'隨時交屋',
+    kit:['Panasonic IH爐','德匠櫃體','林內抽油煙機/烘碗機'], bath:['TOTO衛浴'],
+    other:['先建後售指標案','25層超高層地標','純住家零店面','低建蔽率24.65%'],
+    amenities:{'休閒社交':['接待大廳','交誼廳','視聽室'],'景觀綠化':['中庭花園'],'運動健身':['健身房'],'生活機能':['信箱區']},
+    notes:'基地681.6坪／建蔽率24.65%／公設比36.4%／管理費90元。使照為(114)高市工建築使字第01049號。',
+    analysis:'先建後售＋低建蔽率，產品定位明確。',
+    tag:'discount', lat:22.723820, lng:120.285620, s591:'https://newhouse.591.com.tw/139857/detail'},
+
+  {name:'冠傑UI', dev:'冠傑建設', status:'新成屋',
+    addr:'大學三十八街51號', permit:'110高市工建00003號', floor:'15F/B2',
+    avgPrice:31.77, minPrice:19.57, maxPrice:38.68, count:184, units:190,
+    layout:'A.B棟15層；2房(21~28坪)／3房(29~40坪)；平面195位',
+    r2:62, r3:38, r4:0, loan:'80%', handover:'已完工',
+    kit:['義大利BEST洗烘碗機','升降吊廚'], bath:['V&B五金','INAX主浴','TOTO次浴'],
+    other:['ERIE全戶淨軟水','紅磚隔間（隔音最佳）','SAKURA氣密窗','基地1076坪','管費70元'],
+    notes:'成交量大，價格帶多。',
+    analysis:'CP值型產品，但你若主打預售銷售，這案更適合放在「成屋對照」區。',
+    tag:'discount', lat:22.732801, lng:120.293561, s591:null},
+];
 
 const BASE = 36.42;
 
@@ -846,10 +1612,11 @@ renderCards();
 <div class="lb-overlay" id="lbOverlay">
   <button class="lb-close" onclick="closeLB()">×</button>
   <button class="lb-nav lb-prev" onclick="lbNav(-1)">‹</button>
-  <img class="lb-img" id="lbImg" src="" alt="平面圖">
+  <img class="lb-img" id="lbImg" src="https://normalsky315-jpg.github.io/NKUinfos/" alt="平面圖">
   <button class="lb-nav lb-next" onclick="lbNav(1)">›</button>
   <div class="lb-counter" id="lbCounter"></div>
 </div>
 
-</body>
-</html>
+
+
+</body></html>
