@@ -1,882 +1,278 @@
 <!DOCTYPE html>
-<!-- saved from url=(0044)https://normalsky315-jpg.github.io/NKUinfos/ -->
-<html lang="zh-TW"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>高大特區 22 案 · 房產分析儀表板</title>
-<link rel="stylesheet" href="./高大特區 22 案 · 房產分析儀表板_files/leaflet.css">
-<script src="./高大特區 22 案 · 房產分析儀表板_files/leaflet.js.下載"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com/">
-<link href="./高大特區 22 案 · 房產分析儀表板_files/css2" rel="stylesheet">
+<title>高大特區房產分析儀表板</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#EFEDE8;
-  --surface:#FFFFFF;
-  --surface2:#F5F2EC;
-  --surface3:#EAE6DF;
-  --border:#D8D3CA;
-  --border-dark:#1C1917;
-  --text:#1C1917;
-  --dim:#57534E;
-  --mute:#A8A29E;
-  --red:#C4230F;
-  --red-bg:#FEF2EF;
-  --red-border:#FBBDAF;
-  --green:#166534;
-  --green-bg:#F0FDF4;
-  --green-border:#BBF7D0;
-  --amber:#92400E;
-  --amber-bg:#FFFBEB;
-  --amber-border:#FDE68A;
-  --blue:#1E3A8A;
-  --sans:'IBM Plex Sans','Noto Sans TC',sans-serif;
+  --ink:#16332C;          /* 深墨綠 */
+  --ink2:#0F241F;
+  --gold:#C19A53;
+  --gold-soft:#E5D5B3;
+  --bg:#F4F1E8;
+  --paper:#FFFFFF;
+  --paper2:#FAF8F2;
+  --line:#DDD6C6;
+  --text:#1E2421;
+  --dim:#5C645F;
+  --mute:#9AA09B;
+  --red:#A93B26;   --red-bg:#FBEFEB;
+  --green:#2F6B4F; --green-bg:#EEF6F1;
+  --amber:#8A6A2F; --amber-bg:#FAF4E6;
+  --serif:'Noto Serif TC',serif;
+  --sans:'Noto Sans TC',sans-serif;
   --mono:'IBM Plex Mono',monospace;
 }
-html,body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+html,body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
 
-/* ── HEADER ── */
-.header{background:var(--surface);border-bottom:2px solid var(--border-dark);padding:20px 28px}
-.header-inner{max-width:1560px;margin:0 auto;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
-.brand h1{font-size:20px;font-weight:600;letter-spacing:-.01em}
-.brand .sub{font-size:13px;color:var(--dim);margin-top:2px;font-family:var(--mono)}
-.header-stats{display:flex;gap:28px;flex-wrap:wrap}
-.hstat{display:flex;flex-direction:column;gap:3px}
-.hstat-l{font-size:11px;color:var(--mute);letter-spacing:.1em;text-transform:uppercase}
-.hstat-v{font-family:var(--mono);font-size:20px;font-weight:600;letter-spacing:-.02em}
+/* ───── 樓書封面式頁首 ───── */
+.masthead{background:var(--ink);color:#F2EDE0;position:relative;overflow:hidden}
+.masthead::after{content:'';position:absolute;inset:10px;border:1px solid rgba(193,154,83,.38);pointer-events:none}
+.mast-in{max-width:1560px;margin:0 auto;padding:30px 36px 26px;display:flex;flex-wrap:wrap;gap:28px;align-items:flex-end;justify-content:space-between;position:relative}
+.mast-title{display:flex;gap:18px;align-items:flex-end}
+.mast-mark{width:8px;align-self:stretch;background:linear-gradient(var(--gold) 60%,transparent 60%);background-size:100% 14px}
+.mast-title h1{font-family:var(--serif);font-weight:900;font-size:30px;letter-spacing:.06em;line-height:1.25}
+.mast-title .sub{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;color:var(--gold-soft);margin-top:6px}
+.mast-stats{display:flex;gap:0;flex-wrap:wrap}
+.mstat{padding:0 26px;border-left:1px solid rgba(229,213,179,.25)}
+.mstat:first-child{border-left:none}
+.mstat .l{font-size:11px;letter-spacing:.22em;color:rgba(229,213,179,.75);margin-bottom:2px}
+.mstat .v{font-family:var(--serif);font-weight:700;font-size:30px;line-height:1.1;color:#F6F1E4}
+.mstat .v small{font-size:13px;font-family:var(--mono);color:rgba(229,213,179,.8);font-weight:400;margin-left:2px}
+.mstat .v.hi{color:#E8A18D}
+.mstat .v.lo{color:#9FCDB6}
+.mstat .s{font-size:11.5px;color:rgba(229,213,179,.65);font-family:var(--mono)}
 
-/* ── KPI ── */
-.kpi-wrap{background:var(--surface);border-bottom:1px solid var(--border)}
-.kpi-row{max-width:1560px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr)}
-.kpi-cell{padding:16px 20px;border-right:1px solid var(--border)}
-.kpi-cell:last-child{border-right:none}
-.kpi-cell .kl{font-size:11px;color:var(--mute);letter-spacing:.09em;text-transform:uppercase;margin-bottom:4px}
-.kpi-cell .kv{font-family:var(--mono);font-size:24px;font-weight:600;letter-spacing:-.02em}
-.kpi-cell .ks{font-size:12px;color:var(--dim);margin-top:2px}
-.kpi-cell .kv.red{color:var(--red)}
-.kpi-cell .kv.green{color:var(--green)}
+/* ───── 指標列 ───── */
+.kpis{background:var(--paper);border-bottom:1px solid var(--line)}
+.kpis-in{max-width:1560px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr)}
+.kpi{padding:15px 22px;border-right:1px solid var(--line);position:relative}
+.kpi:last-child{border-right:0}
+.kpi::before{content:'';position:absolute;top:0;left:22px;width:26px;height:2px;background:var(--gold)}
+.kpi .l{font-size:11px;color:var(--mute);letter-spacing:.16em;margin:4px 0 2px}
+.kpi .v{font-family:var(--serif);font-size:25px;font-weight:700;letter-spacing:-.01em}
+.kpi .v.red{color:var(--red)} .kpi .v.green{color:var(--green)}
+.kpi .s{font-size:12px;color:var(--dim)}
 
-/* ── TOOLBAR ── */
-.toolbar{max-width:1560px;margin:0 auto;padding:12px 28px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
-.vbtn{padding:9px 20px;font-family:var(--mono);font-size:14px;font-weight:600;letter-spacing:.06em;border:1.5px solid var(--border-dark);cursor:pointer;background:transparent;color:var(--dim);transition:all .12s}
-.vbtn.active,.vbtn:hover{background:var(--border-dark);color:#fff}
-.search-inp{flex:1;min-width:220px;padding:9px 14px;border:1.5px solid var(--border);background:var(--surface);font:16px var(--sans);color:var(--text);outline:none}
-.search-inp:focus{border-color:var(--border-dark)}
-select.fil{padding:9px 12px;border:1.5px solid var(--border);background:var(--surface);font:15px var(--sans);color:var(--text);cursor:pointer;outline:none}
-select.fil:focus{border-color:var(--border-dark)}
+/* ───── 工具列 ───── */
+.toolbar{max-width:1560px;margin:0 auto;padding:14px 36px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.vbtn{padding:9px 22px;font-family:var(--serif);font-size:15px;font-weight:700;letter-spacing:.18em;border:1.5px solid var(--ink);cursor:pointer;background:transparent;color:var(--ink);transition:.13s}
+.vbtn.active,.vbtn:hover{background:var(--ink);color:var(--gold-soft)}
+.search-inp{flex:1;min-width:220px;padding:9px 14px;border:1px solid var(--line);border-bottom:2px solid var(--ink);background:var(--paper);font:15px var(--sans);outline:none}
+.search-inp:focus{border-color:var(--gold)}
+select.fil{padding:9px 12px;border:1px solid var(--line);border-bottom:2px solid var(--ink);background:var(--paper);font:14.5px var(--sans);cursor:pointer;outline:none}
+.tbl-ct{font-family:var(--mono);font-size:13px;color:var(--mute);letter-spacing:.08em}
 
+.main{max-width:1560px;margin:0 auto;padding:18px 36px 70px}
 
-.tbl-ct{font-family:var(--mono);font-size:13px;color:var(--mute)}
-
-
-
-
-
-/* ── MAIN CONTAINER ── */
-.main{max-width:1560px;margin:0 auto;padding:20px 28px 60px}
-
-/* ── MAP ── */
-#mapView{display:none;margin-bottom:20px;border:1px solid var(--border);background:var(--surface)}
-.map-head{padding:10px 16px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.map-head h2{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--amber)}
-.map-head .mleg{font-size:12px;color:var(--dim);font-family:var(--mono)}
-#theMap{height:600px}
-.leaflet-container{background:#EDE8DE!important;font-family:var(--sans)!important}
-.leaflet-control-attribution{background:rgba(255,255,255,.85)!important;font-size:10px!important}
-.leaflet-popup-content-wrapper{background:var(--surface);border:1.5px solid var(--border-dark);border-radius:0;padding:0;box-shadow:0 8px 30px rgba(0,0,0,.15)}
-.leaflet-popup-content{margin:0;padding:0;width:230px!important}
-.leaflet-popup-tip{background:var(--border-dark)}
+/* ───── 地圖 ───── */
+#mapView{display:none;margin-bottom:20px;border:1px solid var(--ink);background:var(--paper)}
+.map-head{padding:10px 18px;background:var(--ink);color:var(--gold-soft);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+.map-head h2{font-family:var(--serif);font-size:14px;font-weight:700;letter-spacing:.22em}
+.map-head .mleg{font-size:12px;font-family:var(--mono);color:rgba(229,213,179,.85)}
+#theMap{height:620px}
+.leaflet-container{background:#EAE6D9!important;font-family:var(--sans)!important}
+.leaflet-popup-content-wrapper{background:var(--paper);border:1.5px solid var(--ink);border-radius:0;padding:0;box-shadow:0 10px 32px rgba(15,36,31,.25)}
+.leaflet-popup-content{margin:0;padding:0;width:236px!important}
+.leaflet-popup-tip{background:var(--ink)}
 .mpopup{padding:14px 16px}
-.mpopup-tag{font-size:11px;font-family:var(--mono);letter-spacing:.1em;font-weight:700;margin-bottom:5px}
-.mpopup h3{font-size:15px;font-weight:600;margin-bottom:4px}
-.mpopup .mprice{font-family:var(--mono);font-size:22px;font-weight:600;margin-bottom:3px}
+.mpopup-tag{font-size:11px;font-family:var(--mono);letter-spacing:.1em;font-weight:600;margin-bottom:5px}
+.mpopup h3{font-family:var(--serif);font-size:17px;font-weight:700;margin-bottom:4px}
+.mpopup .mprice{font-family:var(--serif);font-size:24px;font-weight:700;margin-bottom:2px}
 .mpopup .mdelta{font-family:var(--mono);font-size:12px;margin-bottom:8px}
-.mpopup .mrow{display:flex;justify-content:space-between;font-size:12px;color:var(--dim);padding:3px 0;border-bottom:1px solid var(--border)}
+.mpopup .mrow{display:flex;justify-content:space-between;font-size:12.5px;color:var(--dim);padding:3px 0;border-bottom:1px solid var(--line)}
 .mpopup .mrow span:last-child{color:var(--text);font-weight:500}
-.mpopup .dbtn{display:block;width:100%;text-align:center;background:var(--border-dark);color:#fff;border:none;padding:9px;font-size:13px;font-weight:600;cursor:pointer;margin-top:10px;font-family:var(--mono);letter-spacing:.06em}
-.mpopup .dbtn:hover{background:var(--amber)}
-
-/* MAP PILLS */
-.mpill{display:inline-flex;flex-direction:column;align-items:center;padding:4px 10px;font-family:var(--mono);cursor:pointer;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:transform .12s,box-shadow .12s;border-radius:3px;min-width:72px}
-.mpill:hover{transform:scale(1.08);box-shadow:0 4px 16px rgba(0,0,0,.28);z-index:9999}
-.mpill .pn{font-size:12px;font-weight:700;line-height:1.3}
-.mpill .pp{font-size:11px;opacity:.88;line-height:1.3}
+.mpopup .dbtn{display:block;width:100%;text-align:center;background:var(--ink);color:var(--gold-soft);border:none;padding:9px;font-size:13px;font-weight:700;cursor:pointer;margin-top:10px;font-family:var(--serif);letter-spacing:.12em}
+.mpopup .dbtn:hover{background:var(--gold);color:var(--ink2)}
+.mpill{display:inline-flex;flex-direction:column;align-items:center;padding:4px 10px;font-family:var(--mono);cursor:pointer;white-space:nowrap;box-shadow:0 2px 10px rgba(15,36,31,.3);transition:transform .12s;border-radius:2px;min-width:74px}
+.mpill:hover{transform:scale(1.08);z-index:9999}
+.mpill .pn{font-size:12px;font-weight:700;line-height:1.3;font-family:var(--sans)}
+.mpill .pp{font-size:11px;opacity:.9;line-height:1.3}
 .mpill.premium{background:var(--red);color:#fff}
-.mpill.normal{background:var(--border-dark);color:#fff}
+.mpill.normal{background:var(--ink);color:#F2EDE0}
 .mpill.discount{background:var(--green);color:#fff}
-.mpill.presale{background:#fff;color:var(--text);border:1.5px dashed var(--border-dark)}
-.mpill.presale .pn,.mpill.presale .pp{color:var(--text)}
+.mpill.presale{background:#FFFDF7;color:var(--ink);border:1.5px dashed var(--ink)}
 .mpill.warn{background:var(--amber);color:#fff}
 
-/* ── CARD GRID ── */
-#listView{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
-.case-card{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--border);cursor:pointer;transition:box-shadow .15s,border-left-color .15s;display:flex;flex-direction:column}
-.case-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.1)}
-.case-card.premium{border-left-color:var(--red)}
-.case-card.normal{border-left-color:var(--border-dark)}
-.case-card.discount{border-left-color:var(--green)}
-.case-card.warn{border-left-color:var(--amber)}
-
-/* card header */
-.cc-head{padding:14px 16px 10px;border-bottom:1px solid var(--border)}
-.cc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px}
-.cc-name{font-size:18px;font-weight:600;letter-spacing:-.01em;line-height:1.2}
-.cc-price{font-family:var(--mono);font-size:22px;font-weight:600;letter-spacing:-.02em;white-space:nowrap}
-.cc-price.red{color:var(--red)}
-.cc-price.green{color:var(--green)}
-.cc-price.amber{color:var(--amber)}
-.cc-meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:4px}
+/* ───── 卡片 ───── */
+#listView{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+.case-card{background:var(--paper);border:1px solid var(--line);cursor:pointer;display:flex;flex-direction:column;transition:box-shadow .16s,transform .16s;position:relative}
+.case-card:hover{box-shadow:0 10px 28px rgba(15,36,31,.14);transform:translateY(-2px)}
+.case-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+.case-card.premium::before{background:var(--red)}
+.case-card.normal::before{background:var(--ink)}
+.case-card.discount::before{background:var(--green)}
+.case-card.warn::before{background:repeating-linear-gradient(90deg,var(--amber) 0 14px,transparent 14px 22px)}
+.cc-head{padding:16px 18px 11px;border-bottom:1px solid var(--line)}
+.cc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.cc-name{font-family:var(--serif);font-size:20px;font-weight:700;letter-spacing:.02em;line-height:1.25}
+.cc-price{font-family:var(--serif);font-size:25px;font-weight:700;white-space:nowrap;line-height:1.1}
+.cc-price small{font-size:12px;color:var(--dim);font-weight:400;font-family:var(--sans)}
+.cc-price.red{color:var(--red)} .cc-price.green{color:var(--green)} .cc-price.amber{color:var(--amber)}
+.cc-meta{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:5px}
 .cc-dev{font-size:13px;color:var(--dim)}
-.status-pill{font-size:11px;font-family:var(--mono);font-weight:700;padding:2px 8px;letter-spacing:.05em}
-.sp-pre{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border)}
-.sp-new{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
-.sp-done{background:#EFF6FF;color:var(--blue);border:1px solid #BFDBFE}
-
-/* sold bar */
-.cc-sold{padding:10px 16px;border-bottom:1px solid var(--border)}
+.status-pill{font-size:11px;font-family:var(--mono);font-weight:600;padding:2px 8px;letter-spacing:.05em}
+.sp-pre{background:var(--amber-bg);color:var(--amber);border:1px solid #E4D3A6}
+.sp-new{background:var(--green-bg);color:var(--green);border:1px solid #BFDCC9}
+.sp-done{background:#EEF1F6;color:#33415C;border:1px solid #C6CFDD}
+.cc-vs{margin:0 18px;padding:8px 0 2px;font-size:13px;color:var(--ink);line-height:1.55}
+.cc-vs::before{content:'對戰觀點';font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--gold);display:block;margin-bottom:1px}
+.cc-sold{padding:11px 18px;border-bottom:1px solid var(--line)}
 .sold-label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
 .sold-l{font-size:12px;color:var(--dim)}
-.sold-pct{font-family:var(--mono);font-size:14px;font-weight:600}
-.sold-bar{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden}
-.sold-fill{height:100%;border-radius:3px;transition:width .4s}
-.sold-fill.red{background:var(--red)}
-.sold-fill.green{background:var(--green)}
-.sold-fill.amber{background:var(--amber)}
-.sold-fill.gray{background:var(--mute)}
-
-/* card body: chips */
-.cc-chips{padding:10px 16px;display:flex;flex-wrap:wrap;gap:5px;flex:1}
-.chip{display:inline-block;font-size:12px;padding:3px 9px;border:1px solid var(--border);color:var(--dim);background:var(--surface2);border-radius:2px}
-.chip.k{color:var(--amber);border-color:var(--amber-border);background:var(--amber-bg)}
-.chip.b{color:var(--blue);border-color:#BFDBFE;background:#EFF6FF}
-.chip.am{color:#6D28D9;border-color:#DDD6FE;background:#F5F3FF}
-.chip.am-more{color:var(--mute);border-color:var(--border);background:var(--surface2)}
-/* amenities card row */
-.cc-amenities{padding:6px 16px 10px;display:flex;flex-wrap:wrap;gap:5px;border-top:1px dashed var(--border)}
-/* amenities modal section */
-.am-group{margin-bottom:10px}
-.am-group-label{font-size:11px;color:#6D28D9;letter-spacing:.1em;text-transform:uppercase;font-family:var(--mono);font-weight:700;margin-bottom:5px}
-.am-chips{display:flex;flex-wrap:wrap;gap:5px}
-
-/* card footer: vs bar */
-.cc-foot{padding:10px 16px;background:var(--surface2);border-top:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.vs-track{flex:1;height:4px;background:var(--surface3);position:relative;border-radius:2px}
-.vs-center{position:absolute;left:50%;top:-4px;width:1.5px;height:12px;background:var(--border)}
-.vs-fill{height:100%;border-radius:2px}
+.sold-pct{font-family:var(--serif);font-size:16px;font-weight:700}
+.sold-bar{height:5px;background:#ECE7DA;overflow:hidden}
+.sold-fill{height:100%}
+.sold-fill.red{background:var(--red)} .sold-fill.green{background:var(--green)} .sold-fill.amber{background:var(--gold)}
+.sold-sub{font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)}
+.cc-chips{padding:10px 18px;display:flex;flex-wrap:wrap;gap:5px;flex:1}
+.chip{display:inline-block;font-size:12px;padding:3px 9px;border:1px solid var(--line);color:var(--dim);background:var(--paper2)}
+.chip.k{color:var(--amber);border-color:#E4D3A6;background:var(--amber-bg)}
+.chip.b{color:#33415C;border-color:#C6CFDD;background:#EEF1F6}
+.chip.am{color:var(--ink);border-color:#CBD8CF;background:#F0F5F0}
+.chip.am-more{color:var(--mute)}
+.cc-amenities{padding:6px 18px 11px;display:flex;flex-wrap:wrap;gap:5px;border-top:1px dashed var(--line)}
+.cc-foot{padding:11px 18px;background:var(--paper2);border-top:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.vs-track{flex:1;height:4px;background:#E5DFCF;position:relative}
+.vs-center{position:absolute;left:50%;top:-4px;width:1.5px;height:12px;background:var(--mute)}
+.vs-fill{height:100%}
 .vs-pos{background:var(--red);margin-left:50%}
 .vs-neg{background:var(--green);float:right;margin-right:50%}
-.vs-pct{font-family:var(--mono);font-size:14px;font-weight:600;min-width:60px;text-align:right}
-.vs-pct.up{color:var(--red)}
-.vs-pct.dn{color:var(--green)}
-.tag-badge{font-family:var(--mono);font-size:12px;font-weight:700;padding:4px 10px;border:1px solid currentColor;letter-spacing:.04em}
+.vs-pct{font-family:var(--mono);font-size:13.5px;font-weight:600;min-width:60px;text-align:right}
+.vs-pct.up{color:var(--red)} .vs-pct.dn{color:var(--green)}
+.tag-badge{font-family:var(--serif);font-size:13px;font-weight:700;padding:4px 11px;border:1px solid currentColor;letter-spacing:.14em}
 .tb-red{color:var(--red);background:var(--red-bg)}
 .tb-green{color:var(--green);background:var(--green-bg)}
 .tb-amber{color:var(--amber);background:var(--amber-bg)}
 
-
-/* ── FLOOR PLAN GALLERY ── */
-.fp-section{margin-top:14px}
+/* ───── 平面圖/燈箱 ───── */
 .fp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:8px}
-.fp-thumb{width:100%;aspect-ratio:4/3;object-fit:cover;cursor:pointer;border:1px solid var(--border);transition:opacity .12s}
+.fp-thumb{width:100%;aspect-ratio:4/3;object-fit:cover;cursor:pointer;border:1px solid var(--line);transition:opacity .12s}
 .fp-thumb:hover{opacity:.85}
-.fp-thumb.error{background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:12px}
 .fp-count{font-size:12px;color:var(--dim);font-family:var(--mono)}
-/* lightbox */
-.lb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:99999;align-items:center;justify-content:center;flex-direction:column}
+.lb-overlay{display:none;position:fixed;inset:0;background:rgba(8,16,13,.94);z-index:99999;align-items:center;justify-content:center;flex-direction:column}
 .lb-overlay.on{display:flex}
 .lb-img{max-width:90vw;max-height:85vh;object-fit:contain;box-shadow:0 8px 40px rgba(0,0,0,.5)}
 .lb-close{position:fixed;top:16px;right:20px;color:#fff;font-size:32px;cursor:pointer;background:none;border:none;line-height:1;opacity:.8}
-.lb-close:hover{opacity:1}
-.lb-nav{position:fixed;top:50%;transform:translateY(-50%);color:#fff;font-size:36px;cursor:pointer;background:rgba(0,0,0,.3);border:none;padding:12px 16px;line-height:1;opacity:.7}
-.lb-nav:hover{opacity:1}
-.lb-prev{left:8px}
-.lb-next{right:8px}
+.lb-nav{position:fixed;top:50%;transform:translateY(-50%);color:#fff;font-size:36px;cursor:pointer;background:rgba(0,0,0,.3);border:none;padding:12px 16px;opacity:.7}
+.lb-nav:hover,.lb-close:hover{opacity:1}
+.lb-prev{left:8px}.lb-next{right:8px}
 .lb-counter{position:fixed;bottom:16px;color:rgba(255,255,255,.7);font-family:var(--mono);font-size:13px}
 
-/* ── MODAL ── */
-.overlay{display:none;position:fixed;inset:0;background:rgba(28,25,23,.55);backdrop-filter:blur(3px);z-index:9000;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
+/* ───── 詳情視窗 ───── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(15,36,31,.6);backdrop-filter:blur(3px);z-index:9000;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
 .overlay.open{display:flex}
-.modal{background:var(--surface);border:2px solid var(--border-dark);width:100%;max-width:860px;box-shadow:0 24px 60px rgba(0,0,0,.2)}
-.modal-hd{position:sticky;top:0;background:var(--surface2);border-bottom:2px solid var(--border-dark);padding:16px 22px;display:flex;justify-content:space-between;align-items:flex-start;z-index:2}
-.modal-hd h2{font-size:22px;font-weight:600;margin-top:4px}
-.modal-hd .mdev{font-size:13px;color:var(--dim);font-family:var(--mono);margin-top:2px}
-.modal-hd button{background:none;border:1.5px solid var(--border);color:var(--dim);width:34px;height:34px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.modal-hd button:hover{border-color:var(--border-dark);color:var(--text)}
-.modal-bd{padding:22px 24px}
-.price-hero{display:flex;align-items:baseline;gap:16px;padding-bottom:18px;border-bottom:1px solid var(--border);margin-bottom:4px}
-.ph-num{font-family:var(--mono);font-size:46px;font-weight:600;line-height:1}
-.ph-unit{font-size:15px;color:var(--dim);font-family:var(--mono)}
-.msec-title{font-size:12px;font-weight:700;color:var(--amber);letter-spacing:.14em;text-transform:uppercase;margin:18px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);font-family:var(--mono)}
-.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
-.info-cell{background:var(--surface);padding:12px 16px}
-.info-cell.full{grid-column:1/-1}
-.ic-label{font-size:11px;color:var(--mute);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;font-family:var(--mono)}
-.ic-val{font-size:15px;color:var(--text);font-weight:500}
-.mat-list{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
-.notes-box{background:var(--amber-bg);border-left:3px solid var(--amber);padding:12px 16px;font-size:14px;color:var(--dim);line-height:1.7;margin-top:14px}
-.analysis-box{background:#EFF6FF;border-left:3px solid var(--blue);padding:12px 16px;font-size:15px;line-height:1.7;margin-top:12px}
-.analysis-box .al{font-size:11px;font-family:var(--mono);color:var(--blue);letter-spacing:.12em;font-weight:700;margin-bottom:5px;display:block}
-.link-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.link-btn{font-family:var(--mono);font-size:13px;letter-spacing:.06em;padding:9px 16px;text-decoration:none;border:1.5px solid var(--border-dark);color:var(--text);transition:all .12s}
-.link-btn:hover{background:var(--border-dark);color:#fff}
-
-/* sold in modal */
-.modal-sold{padding:14px 24px;background:var(--surface2);border-bottom:1px solid var(--border)}
+.modal{background:var(--paper);border:2px solid var(--ink);width:100%;max-width:880px;box-shadow:0 24px 60px rgba(0,0,0,.3)}
+.modal-hd{position:sticky;top:0;background:var(--ink);color:#F2EDE0;padding:18px 24px;display:flex;justify-content:space-between;align-items:flex-start;z-index:2}
+.modal-hd h2{font-family:var(--serif);font-size:24px;font-weight:900;margin-top:5px;letter-spacing:.04em}
+.modal-hd .mdev{font-size:13px;color:var(--gold-soft);font-family:var(--mono);margin-top:3px}
+.modal-hd button{background:none;border:1px solid rgba(229,213,179,.5);color:var(--gold-soft);width:34px;height:34px;font-size:20px;cursor:pointer;flex-shrink:0}
+.modal-hd button:hover{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.modal-bd{padding:22px 26px}
+.modal-sold{padding:14px 26px;background:var(--paper2);border-bottom:1px solid var(--line)}
 .ms-row{display:flex;align-items:center;gap:14px}
-.ms-bar{flex:1;height:8px;background:var(--surface3);border-radius:4px;overflow:hidden}
-.ms-fill{height:100%;border-radius:4px}
-.ms-pct{font-family:var(--mono);font-size:15px;font-weight:600;min-width:52px;text-align:right}
+.ms-bar{flex:1;height:8px;background:#ECE7DA;overflow:hidden}
+.ms-fill{height:100%}
+.ms-pct{font-family:var(--serif);font-size:17px;font-weight:700;min-width:52px;text-align:right}
 .ms-detail{font-size:13px;color:var(--dim);margin-top:4px;font-family:var(--mono)}
+.price-hero{display:flex;align-items:baseline;gap:16px;padding-bottom:18px;border-bottom:2px solid var(--ink);margin-bottom:4px;flex-wrap:wrap}
+.ph-num{font-family:var(--serif);font-size:50px;font-weight:900;line-height:1}
+.ph-unit{font-size:14px;color:var(--dim);font-family:var(--mono)}
+.msec-title{font-family:var(--serif);font-size:14px;font-weight:700;color:var(--ink);letter-spacing:.26em;margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+.msec-title::before{content:'';width:18px;height:2px;background:var(--gold)}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line)}
+.info-cell{background:var(--paper);padding:12px 16px}
+.info-cell.full{grid-column:1/-1}
+.ic-label{font-size:11px;color:var(--mute);letter-spacing:.14em;margin-bottom:3px;font-family:var(--mono)}
+.ic-val{font-size:15px;font-weight:500}
+.mat-list{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.notes-box{background:var(--amber-bg);border-left:3px solid var(--gold);padding:12px 16px;font-size:14px;color:var(--dim);line-height:1.7;margin-top:14px}
+.analysis-box{background:#F0F4F1;border-left:3px solid var(--ink);padding:12px 16px;font-size:15px;line-height:1.7;margin-top:12px}
+.analysis-box .al{font-family:var(--serif);font-size:12px;color:var(--ink);letter-spacing:.22em;font-weight:700;margin-bottom:5px;display:block}
+.vs-box{background:var(--ink);color:#F2EDE0;padding:13px 16px;font-size:15px;line-height:1.7;margin-top:12px}
+.vs-box .al{font-family:var(--serif);font-size:12px;color:var(--gold);letter-spacing:.22em;font-weight:700;margin-bottom:5px;display:block}
+.am-group{margin-bottom:10px}
+.am-group-label{font-size:11px;color:var(--ink);letter-spacing:.14em;font-family:var(--mono);font-weight:600;margin-bottom:5px}
+.am-chips{display:flex;flex-wrap:wrap;gap:5px}
+.link-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.link-btn{font-family:var(--serif);font-size:13.5px;font-weight:700;letter-spacing:.1em;padding:9px 18px;text-decoration:none;border:1.5px solid var(--ink);color:var(--ink);transition:.12s}
+.link-btn:hover{background:var(--ink);color:var(--gold-soft)}
+#loadErr{max-width:700px;margin:60px auto;background:var(--paper);border:1.5px solid var(--red);padding:24px;display:none;font-size:15px;line-height:1.8}
+.footer{max-width:1560px;margin:0 auto;padding:0 36px 40px;font-family:var(--mono);font-size:11.5px;color:var(--mute);letter-spacing:.08em}
 
-/* donut */
-.donut-wrap{display:flex;align-items:center;gap:14px;margin-top:8px}
-.donut-legend{display:flex;flex-direction:column;gap:4px}
-.dl-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--dim)}
-.dl-dot{width:10px;height:10px;border-radius:50%}
-
-/* toast */
-#toast{display:none;position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--border-dark);color:#fff;font-family:var(--mono);font-size:14px;padding:12px 24px;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,.3);pointer-events:none}
-
-@media(max-width:900px){
-  .kpi-row{grid-template-columns:repeat(3,1fr)}
-  .kpi-cell:nth-child(3){border-right:none}
+@media(max-width:980px){
+  .kpis-in{grid-template-columns:repeat(3,1fr)}
+  .kpi:nth-child(3){border-right:0}
   #listView{grid-template-columns:1fr}
   .info-grid{grid-template-columns:1fr}
-  .modal{max-width:100%}
-}
-@media(max-width:640px){
-  .header{padding:14px 16px}
-  .main{padding:14px 16px 40px}
-  .toolbar{padding:10px 16px}
-  .header-stats{gap:16px}
-  .hstat-v{font-size:17px}
+  .mast-in{padding:22px 18px}
+  .mast-title h1{font-size:23px}
+  .mstat{padding:0 16px}
+  .mstat .v{font-size:23px}
+  .toolbar,.main,.footer{padding-left:18px;padding-right:18px}
 }
 </style>
-<style>
-  .imageye-selected {
-    outline: 2px solid black !important;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
-  }
-</style></head>
+</head>
 <body>
 
-<div class="header">
-  <div class="header-inner">
-    <div class="brand">
-      <h1>高大特區 22 案 · 房產分析儀表板</h1>
-      <div class="sub">樂居實登 113.01–115.03 · V16 · 2026.05.16</div>
+<div class="masthead">
+  <div class="mast-in">
+    <div class="mast-title">
+      <div class="mast-mark"></div>
+      <div>
+        <h1 id="hTitle">高大特區房產分析儀表板</h1>
+        <div class="sub" id="hSub">—</div>
+      </div>
     </div>
-    <div class="header-stats">
-      <div class="hstat"><span class="hstat-l">案數</span><span class="hstat-v">22</span></div>
-      <div class="hstat"><span class="hstat-l">區域基準</span><span class="hstat-v">36.42<span style="font-size:13px;color:var(--dim)"> 萬/坪</span></span></div>
-      <div class="hstat"><span class="hstat-l">最高均價</span><span class="hstat-v" style="color:var(--red)">50.20</span></div>
-      <div class="hstat"><span class="hstat-l">最低均價</span><span class="hstat-v" style="color:var(--green)">28.99</span></div>
-    </div>
+    <div class="mast-stats" id="mastStats"></div>
   </div>
 </div>
 
-<div class="kpi-wrap">
-  <div class="kpi-row">
-    <div class="kpi-cell"><div class="kl">溢價門檻 +10%</div><div class="kv red">40.06</div><div class="ks">≥ 此為紅標</div></div>
-    <div class="kpi-cell"><div class="kl">折價門檻 −5%</div><div class="kv green">34.60</div><div class="ks">≤ 此為綠標</div></div>
-    <div class="kpi-cell"><div class="kl">累計成交筆數</div><div class="kv">1,648</div><div class="ks">22 案合計</div></div>
-    <div class="kpi-cell"><div class="kl">最高售出率</div><div class="kv green">98%</div><div class="ks">遠見峰悅 310/318</div></div>
-    <div class="kpi-cell"><div class="kl">最低售出率</div><div class="kv red">2%</div><div class="ks">冠傑Ai 5/231</div></div>
-    <div class="kpi-cell"><div class="kl">資料更新</div><div class="kv" style="font-size:18px">115.03</div><div class="ks">民國年月</div></div>
-  </div>
-</div>
+<div class="kpis"><div class="kpis-in" id="kpiRow"></div></div>
 
 <div style="max-width:1560px;margin:0 auto">
   <div class="toolbar">
-    <button class="vbtn active" id="btnList" onclick="setView(&#39;list&#39;)">卡片</button>
-    <button class="vbtn" id="btnMap" onclick="setView(&#39;map&#39;)">地圖</button>
+    <button class="vbtn active" id="btnList" onclick="setView('list')">卡 片</button>
+    <button class="vbtn" id="btnMap" onclick="setView('map')">地 圖</button>
     <input class="search-inp" id="searchInput" placeholder="搜尋案名、建商、建材…">
     <select class="fil" id="tagFilter">
-      <option value="all">全部定位</option>
-      <option value="premium">溢價</option>
-      <option value="normal">均值</option>
-      <option value="discount">折價</option>
+      <option value="all">全部定位</option><option value="premium">溢價</option>
+      <option value="normal">均值</option><option value="discount">折價</option>
     </select>
     <select class="fil" id="statusFilter">
-      <option value="all">全部狀態</option>
-      <option value="預售">預售屋</option>
-      <option value="新成屋">新成屋</option>
-      <option value="成屋">成屋</option>
+      <option value="all">全部狀態</option><option value="預售">預售屋</option>
+      <option value="新成屋">新成屋</option><option value="成屋">成屋</option>
     </select>
     <select class="fil" id="sortSelect">
-      <option value="price_desc">單價 ↓</option>
-      <option value="price_asc">單價 ↑</option>
-      <option value="sold_desc">售出率 ↓</option>
-      <option value="count_desc">成交量 ↓</option>
+      <option value="price_desc">單價 ↓</option><option value="price_asc">單價 ↑</option>
+      <option value="sold_desc">售出率 ↓</option><option value="count_desc">成交量 ↓</option>
     </select>
-    <span class="tbl-ct" id="tblCt">21 / 21 案</span>
-    
+    <span class="tbl-ct" id="tblCt"></span>
   </div>
 </div>
 
 <div class="main">
-  <!-- MAP -->
-  <div id="mapView" style="display: none;">
+  <div id="mapView">
     <div class="map-head">
       <h2>地圖分布 · 案名＋均價</h2>
-      <span class="mleg">■ 紅=溢價 ■ 黑=均值 ■ 綠=折價 ⬚ 虛線=預售</span>
+      <span class="mleg">■ 紅＝溢價　■ 墨綠＝均值　■ 綠＝折價　⬚ 虛框＝預售　■ 土金＝警示</span>
     </div>
     <div id="theMap"></div>
   </div>
-
-  <!-- CARDS -->
-  <div id="listView"><div class="case-card premium" onclick="openModal(12)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">高大之森</div>
-          <div class="cc-price red">50.20<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">中德建設（茂德）</span>
-          <span class="status-pill sp-pre">預售屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--red)">91%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill red" style="width:91%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 331 / 362 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">櫻花全套廚具</span><span class="chip k">廚下熱飲機</span><span class="chip b">TOTO全系列雙免治（全戶）</span></div>
-      <div class="cc-amenities"><span class="chip am">健身房</span><span class="chip am">瑜伽教室</span><span class="chip am">KTV</span><span class="chip am">Lounge Bar</span><span class="chip am-more">+11</span></div>
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:50%"></div></div>
-        <span class="vs-pct up">+37.8%</span>
-        <span class="tag-badge tb-red">溢價</span>
-      </div>
-    </div><div class="case-card premium" onclick="openModal(0)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">高大之森2・高大之上</div>
-          <div class="cc-price red">43.13<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">中德建設</span>
-          <span class="status-pill sp-pre">預售屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--red)">11%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill red" style="width:11%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 35 / 314 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">櫻花廚具</span><span class="chip b">TOTO衛浴</span></div>
-      <div class="cc-amenities"><span class="chip am">接待大廳</span><span class="chip am">交誼廳</span><span class="chip am">閱覽室</span><span class="chip am">視聽室</span><span class="chip am-more">+5</span></div>
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:36.84788577704558%"></div></div>
-        <span class="vs-pct up">+18.4%</span>
-        <span class="tag-badge tb-red">溢價</span>
-      </div>
-    </div><div class="case-card premium" onclick="openModal(1)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">遠雄一靚</div>
-          <div class="cc-price red">42.46<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">遠雄建設</span>
-          <span class="status-pill sp-pre">預售屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--red)">13%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill red" style="width:13%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 61 / 461 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">建材待補（預售屋未完整公布）</span><span class="chip b">建材待補</span></div>
-      <div class="cc-amenities"><span class="chip am">森林大門退縮景觀</span><span class="chip am">空中綠意陽台</span><span class="chip am">中庭綠境</span><span class="chip am">接待大廳</span><span class="chip am-more">+1</span></div>
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:33.16858868753432%"></div></div>
-        <span class="vs-pct up">+16.6%</span>
-        <span class="tag-badge tb-red">溢價</span>
-      </div>
-    </div><div class="case-card premium" onclick="openModal(3)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">月理河</div>
-          <div class="cc-price red">42.29<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">得邑建設</span>
-          <span class="status-pill sp-new">新成屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--red)">26%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill red" style="width:26%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 45 / 170 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">堡立名廚豪山三機</span><span class="chip k">波蘭Amica洗碗機</span><span class="chip b">和成智慧型超級馬桶（全戶）</span></div>
-      <div class="cc-amenities"><span class="chip am">接待大廳</span><span class="chip am">交誼廳</span><span class="chip am">會議室</span><span class="chip am">空中花園</span><span class="chip am-more">+2</span></div>
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:32.23503569467324%"></div></div>
-        <span class="vs-pct up">+16.1%</span>
-        <span class="tag-badge tb-red">溢價</span>
-      </div>
-    </div><div class="case-card premium" onclick="openModal(2)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">敘青田</div>
-          <div class="cc-price red">41.03<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">興連城開發</span>
-          <span class="status-pill sp-pre">預售屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--red)">12%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill red" style="width:12%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 11 / 92 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">Miton廚具</span><span class="chip k">Glemgas爐具</span><span class="chip b">Roca衛浴</span></div>
-      
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:25.31576057111477%"></div></div>
-        <span class="vs-pct up">+12.7%</span>
-        <span class="tag-badge tb-red">溢價</span>
-      </div>
-    </div><div class="case-card premium" onclick="openModal(20)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">博市陞</div>
-          <div class="cc-price red">40.57<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">龍陞開發</span>
-          <span class="status-pill sp-new">新成屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--red)">38%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill red" style="width:38%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 36 / 94 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">資訊待補</span><span class="chip b">資訊待補</span></div>
-      
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:22.789676002196586%"></div></div>
-        <span class="vs-pct up">+11.4%</span>
-        <span class="tag-badge tb-red">溢價</span>
-      </div>
-    </div><div class="case-card premium warn" onclick="openModal(11)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">玉原道 ⚠</div>
-          <div class="cc-price amber">40.06<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">玉鎮建設</span>
-          <span class="status-pill sp-pre">預售屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--red)">99%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill red" style="width:99%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 69 / 70 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">資訊待補</span><span class="chip b">資訊待補</span></div>
-      
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:19.9890170236134%"></div></div>
-        <span class="vs-pct up">+10.0%</span>
-        <span class="tag-badge tb-red">溢價</span>
-      </div>
-    </div><div class="case-card normal" onclick="openModal(4)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">鳳凰萃</div>
-          <div class="cc-price amber">39.61<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">隆大建設</span>
-          <span class="status-pill sp-new">新成屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--amber)">16%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill amber" style="width:16%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 33 / 201 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">林內三機</span><span class="chip k">Panasonic廚櫃</span><span class="chip b">HCG雙免治</span></div>
-      <div class="cc-amenities"><span class="chip am">健身房</span><span class="chip am">KTV</span><span class="chip am">Lounge Bar</span><span class="chip am">接待大廳</span><span class="chip am-more">+5</span></div>
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:17.51784733662821%"></div></div>
-        <span class="vs-pct up">+8.8%</span>
-        <span class="tag-badge tb-amber">均值</span>
-      </div>
-    </div><div class="case-card normal" onclick="openModal(9)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">蒙瑪特</div>
-          <div class="cc-price amber">39.20<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">璞盛建築</span>
-          <span class="status-pill sp-new">新成屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--amber)">39%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill amber" style="width:39%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 13 / 33 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">德國品牌（待補）</span><span class="chip b">V&amp;B、GROHE五金（待補）</span></div>
-      
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:15.266337177375075%"></div></div>
-        <span class="vs-pct up">+7.6%</span>
-        <span class="tag-badge tb-amber">均值</span>
-      </div>
-    </div><div class="case-card normal" onclick="openModal(5)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">以學MDT</div>
-          <div class="cc-price amber">39.03<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">華友聯開發</span>
-          <span class="status-pill sp-pre">預售屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--amber)">8%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill amber" style="width:8%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 18 / 229 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">德國noblessa廚具</span><span class="chip k">SVAGO感應爐</span><span class="chip b">Villeroy&amp;Boch五金</span></div>
-      <div class="cc-amenities"><span class="chip am">健身房</span><span class="chip am">接待大廳</span><span class="chip am">交誼廳</span><span class="chip am">閱覽室</span><span class="chip am-more">+5</span></div>
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:14.332784184513999%"></div></div>
-        <span class="vs-pct up">+7.2%</span>
-        <span class="tag-badge tb-amber">均值</span>
-      </div>
-    </div><div class="case-card normal" onclick="openModal(6)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">冠傑Ai</div>
-          <div class="cc-price amber">38.90<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">冠傑建設</span>
-          <span class="status-pill sp-pre">預售屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--amber)">2%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill amber" style="width:2%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 5 / 231 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">義大利BEST除氯洗烘碗機</span><span class="chip b">INAX主浴</span></div>
-      
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:13.618890719384936%"></div></div>
-        <span class="vs-pct up">+6.8%</span>
-        <span class="tag-badge tb-amber">均值</span>
-      </div>
-    </div><div class="case-card normal" onclick="openModal(8)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">遠見禾悅</div>
-          <div class="cc-price amber">38.88<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">全誠建設</span>
-          <span class="status-pill sp-new">新成屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--amber)">39%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill amber" style="width:39%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 66 / 170 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">義大利Miton等級進口廚具</span><span class="chip b">INAX精品衛浴</span></div>
-      <div class="cc-amenities"><span class="chip am">健身房</span><span class="chip am">KTV</span><span class="chip am">視聽室</span><span class="chip am">接待大廳</span><span class="chip am-more">+6</span></div>
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:13.509060955518951%"></div></div>
-        <span class="vs-pct up">+6.8%</span>
-        <span class="tag-badge tb-amber">均值</span>
-      </div>
-    </div><div class="case-card normal" onclick="openModal(7)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">翊城晶綻</div>
-          <div class="cc-price amber">38.50<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">翊城建設</span>
-          <span class="status-pill sp-new">新成屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--amber)">22%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill amber" style="width:22%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 13 / 60 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">資訊待補</span><span class="chip b">資訊待補</span></div>
-      
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:11.42229544206479%"></div></div>
-        <span class="vs-pct up">+5.7%</span>
-        <span class="tag-badge tb-amber">均值</span>
-      </div>
-    </div><div class="case-card normal" onclick="openModal(10)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">行見築</div>
-          <div class="cc-price amber">38.27<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">居富建設</span>
-          <span class="status-pill sp-pre">預售屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--amber)">36%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill amber" style="width:36%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 46 / 129 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">BOSCH全嵌洗碗機</span><span class="chip k">Panasonic廚具</span><span class="chip b">Panasonic雙免治（全戶）</span></div>
-      <div class="cc-amenities"><span class="chip am">健身房</span><span class="chip am">接待大廳</span><span class="chip am">交誼廳</span><span class="chip am">閱覽室</span><span class="chip am-more">+3</span></div>
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:10.159253157605718%"></div></div>
-        <span class="vs-pct up">+5.1%</span>
-        <span class="tag-badge tb-amber">均值</span>
-      </div>
-    </div><div class="case-card normal warn" onclick="openModal(13)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">吉隆森淼 ⚠</div>
-          <div class="cc-price amber">37.40<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">吉隆建設</span>
-          <span class="status-pill sp-pre">預售屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--amber)">10%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill amber" style="width:10%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 16 / 157 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">櫻花三機</span><span class="chip b">TOTO免治</span></div>
-      
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-pos" style="width:5.381658429434359%"></div></div>
-        <span class="vs-pct up">+2.7%</span>
-        <span class="tag-badge tb-amber">均值</span>
-      </div>
-    </div><div class="case-card discount" onclick="openModal(14)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">琢萃</div>
-          <div class="cc-price amber">34.95<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">協勝發建設</span>
-          <span class="status-pill sp-new">新成屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--green)">7%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill green" style="width:7%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 13 / 190 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">德國VB五金（待確認）</span><span class="chip b">資訊待補</span></div>
-      
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-neg" style="width:8.07248764415156%"></div></div>
-        <span class="vs-pct dn">-4.0%</span>
-        <span class="tag-badge tb-green">折價</span>
-      </div>
-    </div><div class="case-card discount" onclick="openModal(15)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">華雄交響曲</div>
-          <div class="cc-price green">33.34<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">華雄建設</span>
-          <span class="status-pill sp-new">新成屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--green)">97%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill green" style="width:97%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 122 / 126 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">櫻花廚具</span><span class="chip b">American Standard</span></div>
-      
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-neg" style="width:16.913783635365174%"></div></div>
-        <span class="vs-pct dn">-8.5%</span>
-        <span class="tag-badge tb-green">折價</span>
-      </div>
-    </div><div class="case-card discount" onclick="openModal(16)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">冠傑UI</div>
-          <div class="cc-price green">32.53<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">冠傑建設</span>
-          <span class="status-pill sp-new">新成屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--green)">97%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill green" style="width:97%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 184 / 190 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">義大利BEST洗烘碗機</span><span class="chip k">升降吊廚</span><span class="chip b">V&amp;B五金</span></div>
-      
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-neg" style="width:21.361889071938496%"></div></div>
-        <span class="vs-pct dn">-10.7%</span>
-        <span class="tag-badge tb-green">折價</span>
-      </div>
-    </div><div class="case-card discount" onclick="openModal(19)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">崑庭馥御</div>
-          <div class="cc-price green">31.62<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">崑庭建設</span>
-          <span class="status-pill sp-new">新成屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--green)">82%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill green" style="width:82%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 369 / 450 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">各期不一（E期以上林內三機）</span><span class="chip b">各期不同，H期HCG免治</span></div>
-      
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-neg" style="width:26.35914332784185%"></div></div>
-        <span class="vs-pct dn">-13.2%</span>
-        <span class="tag-badge tb-green">折價</span>
-      </div>
-    </div><div class="case-card discount" onclick="openModal(17)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">遠見峰悅</div>
-          <div class="cc-price green">31.47<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">全誠建設</span>
-          <span class="status-pill sp-new">新成屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--green)">98%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill green" style="width:98%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 312 / 318 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">歐化廚具（木紋耐磨）</span><span class="chip b">電腦免治馬桶（主臥）</span></div>
-      <div class="cc-amenities"><span class="chip am">健身房</span><span class="chip am">KTV</span><span class="chip am">接待大廳</span><span class="chip am">交誼廳</span><span class="chip am-more">+4</span></div>
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-neg" style="width:27.182866556836917%"></div></div>
-        <span class="vs-pct dn">-13.6%</span>
-        <span class="tag-badge tb-green">折價</span>
-      </div>
-    </div><div class="case-card discount" onclick="openModal(18)">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">之見築</div>
-          <div class="cc-price green">28.99<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">居富建設</span>
-          <span class="status-pill sp-pre">預售屋</span>
-        </div>
-      </div>
-      <div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--green)">92%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill green" style="width:92%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">實登 133 / 144 戶</div>
-    </div>
-      <div class="cc-chips"><span class="chip k">資訊待補</span><span class="chip b">資訊待補</span></div>
-      
-      <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill vs-neg" style="width:40.80175727622187%"></div></div>
-        <span class="vs-pct dn">-20.4%</span>
-        <span class="tag-badge tb-green">折價</span>
-      </div>
-    </div></div>
+  <div id="listView"></div>
+  <div id="loadErr"></div>
 </div>
 
-<!-- MODAL -->
+<div class="footer" id="footer"></div>
+
 <div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
-  <div class="modal" id="modal">
+  <div class="modal">
     <div class="modal-hd">
       <div>
         <div id="modalTag"></div>
@@ -890,382 +286,135 @@ select.fil:focus{border-color:var(--border-dark)}
   </div>
 </div>
 
-<div id="toast"></div>
+<div class="lb-overlay" id="lbOverlay">
+  <button class="lb-close" onclick="closeLB()">×</button>
+  <button class="lb-nav lb-prev" onclick="lbNav(-1)">‹</button>
+  <img class="lb-img" id="lbImg" alt="平面圖">
+  <button class="lb-nav lb-next" onclick="lbNav(1)">›</button>
+  <div class="lb-counter" id="lbCounter"></div>
+</div>
 
 <script>
-const FLOOR_PLANS = {
-  "高大之森": ["https://drive.google.com/thumbnail?id=1P6N6lCsW0ISvxqWqktQKTTxUbqst3xUv&sz=w1200", "https://drive.google.com/thumbnail?id=1XSYdxd20aq_K14dPkCHV2FGz4xlcAi8m&sz=w1200", "https://drive.google.com/thumbnail?id=13cw96hmqrwoe4Jp42XWFG-WZOwuUMyM5&sz=w1200", "https://drive.google.com/thumbnail?id=1LUKTk-A44dQe3TLc7GbUcLXRhnB8jpdr&sz=w1200", "https://drive.google.com/thumbnail?id=1Nlt4UIJTls7efzPb9cJ0loGs08-Gb-Mj&sz=w1200", "https://drive.google.com/thumbnail?id=1tTKgfwZNefjTtW9CcNBKfS3cTJIfMrNu&sz=w1200", "https://drive.google.com/thumbnail?id=1_fCt2QM5RSoye3OWE1SopwoO4yMKwykI&sz=w1200", "https://drive.google.com/thumbnail?id=1gQxEJ46GHGq9ajg-5U_26gymbhcoUwig&sz=w1200"],
-  "冠傑Ai": ["https://drive.google.com/thumbnail?id=1ntHbNzMojXZayuqbox62dAI6mH46ftkw&sz=w1200", "https://drive.google.com/thumbnail?id=1VefZgWGtOpRxka_VD2pWlzMsgNYz_eos&sz=w1200", "https://drive.google.com/thumbnail?id=1bsZf8IlGw0yALJruxN-KZ5ONKInmXWRl&sz=w1200", "https://drive.google.com/thumbnail?id=1ePESF5G4XBQG08W9ZS8NT064uR-u4bjI&sz=w1200", "https://drive.google.com/thumbnail?id=1o-G_9s_0ZvJdOTYKQAUkWdu6HiZXZvu7&sz=w1200", "https://drive.google.com/thumbnail?id=1R1YZPuC1ALZQCZ62GarXatAMCkWbV401&sz=w1200", "https://drive.google.com/thumbnail?id=1TvwTD7KoBKzUbYPS5AO-zX6Wj4Fy-pnF&sz=w1200", "https://drive.google.com/thumbnail?id=1zhNaUnqoWnedQ9Yu_FWQppj8Skspfyzq&sz=w1200"],
-  "遠見禾悅": ["https://drive.google.com/thumbnail?id=1LE9kXP68UkRq3UctWOQT5XEPMjVV3OVs&sz=w1200", "https://drive.google.com/thumbnail?id=1GWnqUY6UAhS7ZjDnM_InyY3wawTVI2Qt&sz=w1200", "https://drive.google.com/thumbnail?id=1G_jQ2racwsXLCvKi4zGnssWCWjiXeucW&sz=w1200", "https://drive.google.com/thumbnail?id=17zPpQQyvDa6dB10Qm8VWHkCnYHhl6DM9&sz=w1200", "https://drive.google.com/thumbnail?id=1eE5-tJGAaqUVwbZlBv9rcpEz3GttRlf8&sz=w1200", "https://drive.google.com/thumbnail?id=1wHutdJHfVhTJs6e9ZR7qVlcK3ax9Ncy5&sz=w1200", "https://drive.google.com/thumbnail?id=1jPlOFiyvqSSsaRQyfgVAvFP0kHxVwQvr&sz=w1200", "https://drive.google.com/thumbnail?id=12eezR-BrIG28CP7Oyy7ah3ejT9KRAOF8&sz=w1200"],
-  "崑庭馥御": ["https://drive.google.com/thumbnail?id=16dfvCWSh2aZ6g3y8Yrpb7gh_Hj9F6Oaj&sz=w1200", "https://drive.google.com/thumbnail?id=19uD9W_vXxvARWOAOzeJhNPKIUgqzgx-g&sz=w1200", "https://drive.google.com/thumbnail?id=1cx6SSkYTxvQAET8W-2xsswdVXHcmBsCL&sz=w1200", "https://drive.google.com/thumbnail?id=1jNkrGtpd-PM06II8OiSLpTKtjdp1ivx6&sz=w1200", "https://drive.google.com/thumbnail?id=1D1LNz1oD-cEQnRp8HO6J4VSiZwb1jPBL&sz=w1200", "https://drive.google.com/thumbnail?id=1Dpty1oc4doBc3TGR0s1vdJseq1FrYXXH&sz=w1200", "https://drive.google.com/thumbnail?id=1TBWSsoqtvUvDemMfoow3uLUAureftNz0&sz=w1200", "https://drive.google.com/thumbnail?id=1kA0ynJFZ12PPn6Bz6nZ_1SebwFUZL0mH&sz=w1200"],
-  "敘青田": ["https://drive.google.com/thumbnail?id=1wtaPCdM9klLIY3gt2-jjA1hqMida4HQ0&sz=w1200", "https://drive.google.com/thumbnail?id=17st0_l46Yep7P7isdTD0r8pLElZykIKy&sz=w1200", "https://drive.google.com/thumbnail?id=1aK2QvzWwtF8m8zo32uQEWoNkFvYVPbnq&sz=w1200", "https://drive.google.com/thumbnail?id=1ktG7lGENrvpb5taFNDxbDw7HbbExnrMP&sz=w1200", "https://drive.google.com/thumbnail?id=1Mpo5pLcZXsS3qV7Ue6oXSQKz_2SC0yQ2&sz=w1200", "https://drive.google.com/thumbnail?id=1QkmHNiG9yA8vq8KyxSWJvhUnwqxVKwEk&sz=w1200", "https://drive.google.com/thumbnail?id=1jNRgWqHxQxhTv6kiG65eY4lVd4FyB_sL&sz=w1200", "https://drive.google.com/thumbnail?id=1K5WLLI9RPB0HpGdrZ08CZor9R3VGHh-s&sz=w1200", "https://drive.google.com/thumbnail?id=1UfT90y4s3mXSi9gkLbI_12AG06-TnVp5&sz=w1200", "https://drive.google.com/thumbnail?id=1UOiTqMFDcrY1QW6baWFnqkbn3hkKdBeN&sz=w1200", "https://drive.google.com/thumbnail?id=1fDb4dMgbhRLlJAHXtuLdVx7mMH0PMsGd&sz=w1200"],
-  "月理河": ["https://drive.google.com/thumbnail?id=1POdagGK_GAcpIZe8s2e-YvIuz7fQl2Xq&sz=w1200", "https://drive.google.com/thumbnail?id=1UR0pFBgXRKJnP6HspRviLgREa8Gq4W6t&sz=w1200", "https://drive.google.com/thumbnail?id=19YbRBeD99WjMgEjH7aro8tVIclk1MeMv&sz=w1200", "https://drive.google.com/thumbnail?id=1qNTJo_XJfSDKDMj21S2yBFurkyrEVUM5&sz=w1200", "https://drive.google.com/thumbnail?id=1llwlFu2OknVr5ZsM1tgNUJ3olvOkhnRS&sz=w1200", "https://drive.google.com/thumbnail?id=1G56kheKbx103WEGI6dYlYbx16-wEgQyw&sz=w1200", "https://drive.google.com/thumbnail?id=1PSAlaxW4pbRiGFYDFBmNGwSvCSNnmof3&sz=w1200", "https://drive.google.com/thumbnail?id=1amJg1qd3exsNp3TUt1_AXmtoXOIOnNrY&sz=w1200"],
-  "行見築": ["https://drive.google.com/thumbnail?id=1jfqK0eHGAyqic8VhrYERhLtfMyIWKKAO&sz=w1200", "https://drive.google.com/thumbnail?id=1b_1wBwgF89ioej4X0GyruhZEiWRRtrso&sz=w1200", "https://drive.google.com/thumbnail?id=1BkGuvABuLk1n0-yz2RnF3FJIT5NXEh43&sz=w1200", "https://drive.google.com/thumbnail?id=1UCo34uJHaPMvcTledjRcCOGXp2hVNSCf&sz=w1200", "https://drive.google.com/thumbnail?id=1MDoUJs9jGK27MIIOeSohZPNvboTafTs3&sz=w1200", "https://drive.google.com/thumbnail?id=1OaGQbXsBkPXyiYUos1T_-Xt3qs0Qzm0_&sz=w1200", "https://drive.google.com/thumbnail?id=1OujV8B8tmvhrmABvKpPxL1mgu1cZZpZc&sz=w1200", "https://drive.google.com/thumbnail?id=1urX3Til7_n-UKjloeCTOxXEX0Kp25VQC&sz=w1200"],
-  "蒙瑪特": ["https://drive.google.com/thumbnail?id=1KCWw-4QUmy3w7sxXK6RbuCSHjdkHBlLP&sz=w1200", "https://drive.google.com/thumbnail?id=1elNY1GEVg4koOLDZyofZta1vQ6Wp5UAw&sz=w1200", "https://drive.google.com/thumbnail?id=10bw7-YN8MZqs85Vssxn3nvMn3DI1qrmx&sz=w1200", "https://drive.google.com/thumbnail?id=1uT1XGHKDYZrtc55OPBESfBLzo-mxx6mI&sz=w1200", "https://drive.google.com/thumbnail?id=1JL8lbjkanXRhPWj2RxtpXnqBxFwEEgKN&sz=w1200", "https://drive.google.com/thumbnail?id=1rNvOmtMLTlkKHR4laFa7OiW_es3B5xAL&sz=w1200", "https://drive.google.com/thumbnail?id=1vBRMpeDp45eFIdcCIzT9J63YsAGyFNm1&sz=w1200", "https://drive.google.com/thumbnail?id=1lZljr8gHRHKVYeWKKiwUpI5OfyXLAJFp&sz=w1200"],
-  "翊城晶綻": ["https://drive.google.com/thumbnail?id=1agJFCANN9is4xFnAtOOOONBAnILdlefT&sz=w1200", "https://drive.google.com/thumbnail?id=1FuW29oD-QqaxqwyqCCtcKS0NLU6Zkm1_&sz=w1200", "https://drive.google.com/thumbnail?id=1R9SHMNMG_4JJtfmr1uG1SU9mpJZ1evPy&sz=w1200", "https://drive.google.com/thumbnail?id=1WN3nJlZ-3HvClsFbRn5Hm5SfM0ou2HwD&sz=w1200", "https://drive.google.com/thumbnail?id=1WwYTgQ4p2AJBKwEc1_PkTzt2kh28AnSV&sz=w1200", "https://drive.google.com/thumbnail?id=1kkAha98z1pQC2UBUCqrJPvWVQGKHYsHU&sz=w1200"],
-  "華雄交響曲": ["https://drive.google.com/thumbnail?id=1eiG4r18PFt0DypINsjWRhDQA37TH9nt3&sz=w1200", "https://drive.google.com/thumbnail?id=11tPDsSO2gWIjee3cJdvKfcuxaFZDIUAc&sz=w1200", "https://drive.google.com/thumbnail?id=1B-P2gFhgxQcPvMqENpgKTmF-fj8_whLl&sz=w1200", "https://drive.google.com/thumbnail?id=1q7-Xc_4HONz2XKNeHpe6dfZMCsmexzag&sz=w1200", "https://drive.google.com/thumbnail?id=1eSfSRZQWwLVgLXQGYssN_Xc_hvW0wEA-&sz=w1200", "https://drive.google.com/thumbnail?id=1Bkhd_bWP-_Rp2eYq6XVFqUbDkrO9pEdV&sz=w1200", "https://drive.google.com/thumbnail?id=1Rn5JeOKpZpQdBZZTs5C_8CthnnKhPG1_&sz=w1200", "https://drive.google.com/thumbnail?id=1Y48LvM9vaATKdRHR5p6K7xQt1cvcw16t&sz=w1200"],
-  "鳳凰萃": ["https://drive.google.com/thumbnail?id=1hSNQhX2zE80ID9KnOjXhcFIGKOTmQvkh&sz=w1200", "https://drive.google.com/thumbnail?id=1Oq7Sv7IzBL7_h-9-VX7CnCk-rLW4JnFR&sz=w1200", "https://drive.google.com/thumbnail?id=11tctkurh1dLXFRc5N9GM8_6ZRBcOHERV&sz=w1200", "https://drive.google.com/thumbnail?id=1HEeqCQV1QO7PQS_rKFhDfa2UPT1WJf_2&sz=w1200", "https://drive.google.com/thumbnail?id=1rb1b3He40psd7B-Lzt0zgxAFkKrR1nr4&sz=w1200", "https://drive.google.com/thumbnail?id=1jLd9UHWDlWgfy8XjQ8_NpR_9udOz2-9o&sz=w1200", "https://drive.google.com/thumbnail?id=1hmrXNrvS5J9HqndpmcJEuQalaZf4aR_5&sz=w1200", "https://drive.google.com/thumbnail?id=11HhgvU5Zsc7Yn9iYi4tOo0hCScvzlXzM&sz=w1200"],
-  "遠雄一靚": ["https://drive.google.com/thumbnail?id=1qc4BBOXM486j0n58erRwl_qzFmpMvMUc&sz=w1200", "https://drive.google.com/thumbnail?id=1AxLZMulrplMfYM3usXJuipUfXAL7o-kF&sz=w1200", "https://drive.google.com/thumbnail?id=1pAbN31zT3v-_ZfMyz5fcRIrnwAl73Z5U&sz=w1200", "https://drive.google.com/thumbnail?id=1_PnTBDl6Pknx08UVlOEvXM4HRUtRU6cq&sz=w1200", "https://drive.google.com/thumbnail?id=1niUoKLX5doqeS1XGOOZxZumByOgZs12q&sz=w1200", "https://drive.google.com/thumbnail?id=1phFxg74jG4wnlGdtt6n6S8bXezEfiH5v&sz=w1200", "https://drive.google.com/thumbnail?id=1uabwY68jdctD-FfNAo5Gg56cX5MNC1l8&sz=w1200", "https://drive.google.com/thumbnail?id=14KWvBfUGdKsQS1x4JJ6cDI5LGkT4SraS&sz=w1200"],
-  "博市陞": ["https://drive.google.com/thumbnail?id=1aj6-4ymP1mM0GgecGwn5I5ma-zVXOTKb&sz=w1200", "https://drive.google.com/thumbnail?id=1cZGcjktjObjsWMJnw8wZJUW5nSZL4XbG&sz=w1200", "https://drive.google.com/thumbnail?id=1tGQ11BFZ_PqKVdkh7DRjHADqEEbFuwTl&sz=w1200", "https://drive.google.com/thumbnail?id=1REmGBTSsCua0Nf1Ta4eKJgBZlFck77ZV&sz=w1200", "https://drive.google.com/thumbnail?id=123Cnua5Xj5dUVRJ55HlQwNB1iYrvY821&sz=w1200", "https://drive.google.com/thumbnail?id=1EvUePrkcrOA3--nWcoKmRwC1giRz2Kl2&sz=w1200", "https://drive.google.com/thumbnail?id=18uOozheYf4GVsAEgmyP9kZytqcsEKahW&sz=w1200", "https://drive.google.com/thumbnail?id=1WHaZNTfQNX8IwuDU6k_wk9iJYGclxx4-&sz=w1200"],
-  "以學MDT": ["https://drive.google.com/thumbnail?id=1XfpFCarsdPSxJNqMiHdaOa9IpP8q8U5w&sz=w1200", "https://drive.google.com/thumbnail?id=1Xa6pZuC7k05E94SP1_KxYQKf0Lp7g_r5&sz=w1200", "https://drive.google.com/thumbnail?id=1MEDQHy-WGGDP4FE-3pjdQCeQgTbYtCfb&sz=w1200", "https://drive.google.com/thumbnail?id=1npgMHm8eXxqoqcEp1mtFh9YXNwKSwALZ&sz=w1200", "https://drive.google.com/thumbnail?id=12rTwP2AO7tt077GrR_H8L0Zg1iFb7IoY&sz=w1200", "https://drive.google.com/thumbnail?id=1q-XvPjIWVU7jhyh-JwLkIyLbfxIZhIY9&sz=w1200", "https://drive.google.com/thumbnail?id=1U-_1a1UKGY_FS8wgjPhtVmhv6H_jWFSg&sz=w1200", "https://drive.google.com/thumbnail?id=1S3xNpM4MgDBkgV4dg7rQxrnUpCF25cso&sz=w1200"],
-};
+let DB=null, projects=[], S=null;
 
-const BASE = 36.42;
-
-const projects = [
-  {name:'高大之森2・高大之上', dev:'中德建設', status:'預售屋',
-    addr:'大學南路（藍田西段12等地號）', permit:'114高市工建00763號', floor:'20F/B3',
-    avgPrice:43.13, minPrice:40.81, maxPrice:46.02, count:35, units:314,
-    layout:'2棟20層；2房(20~27坪)／3房(33~34坪)；全平面309位',
-    r2:40, r3:60, r4:0, loan:'75%', handover:'2028下半年',
-    kit:['櫻花廚具'], bath:['TOTO衛浴','Hansgrohe龍頭','Panasonic四合一暖風'],
-    other:['人臉辨識電子鎖','Honeywell空清','日立永大電梯','BWT軟水','長庚活水','德國Classen木地板'],
-    amenities:{'休閒社交':['接待大廳','交誼廳','閱覽室','視聽室'],'兒童親子':['兒童遊戲區'],'景觀綠化':['中庭花園','空中花園'],'生活機能':['信箱區','曬被區']},
-    notes:'公設比35.8%／建蔽率33.66%／基地1253.51坪。中德建設、承優營造，大瀚建築師事務所。工程零付款方案。',
-    analysis:'20樓校園首排地標，大學南路面對25萬坪高大校園，314戶純住家，建材達輕豪宅等級。',
-    tag:'premium', lat:22.730950, lng:120.280611, s591:'https://newhouse.591.com.tw/139790/detail'},
-
-  {name:'遠雄一靚', dev:'遠雄建設', status:'預售屋',
-    addr:'大學二十三街vs大學二十六街', permit:'114高市工建00322號', floor:'20F/B3',
-    avgPrice:42.46, minPrice:38.37, maxPrice:50.33, count:61, units:461,
-    layout:'A.B.D三棟20層；2房(22~26坪)／3房(33~36坪)；全平面480位',
-    r2:55, r3:45, r4:0, loan:'70%', handover:'2029Q3',
-    kit:['建材待補（預售屋未完整公布）'], bath:['建材待補'],
-    other:['遠雄555安心保固（結構25年/防水5年/地壁磚5年）','全平面480位','公設比36%'],
-    amenities:{'景觀綠化':['森林大門退縮景觀','空中綠意陽台','中庭綠境'],'生活機能':['接待大廳','EV充電（480位）']},
-    notes:'公設比36%／建蔽率28.99%／基地2432坪。林子森林伯諭聯合建築師。貸款僅70%（全區最嚴）。',
-    analysis:'品牌信譽最強，換約流動性最佳。貸款僅70%，自備款需求高。',
-    tag:'premium', lat:22.729602, lng:120.280209, s591:'https://newhouse.591.com.tw/139855/detail'},
-
-  {name:'敘青田', dev:'興連城開發', status:'預售屋',
-    addr:'大學十一街vs大學二十六街', permit:'113高市工建01378號', floor:'14F/B3',
-    avgPrice:41.03, minPrice:38.47, maxPrice:44.13, count:11, units:92,
-    layout:'A棟14層；2房(20~28坪)／3房(33~41坪)',
-    r2:40, r3:60, r4:0, loan:'80%', handover:'2028Q4',
-    kit:['Miton廚具','Glemgas爐具'], bath:['Roca衛浴'],
-    other:['柱中柱耐震系統','藍田公園第一排','精品小社區92戶','管費85元'],
-    notes:'公設比未公布／建蔽率42.99%／基地489.9坪。原東聯合建築師。',
-    analysis:'藍田公園首排，柱中柱耐震規格高。11筆成交代表性中等。',
-    tag:'premium', lat:22.729416, lng:120.287113, s591:'https://newhouse.591.com.tw/139504/detail'},
-
-  {name:'月理河', dev:'得邑建設', status:'新成屋',
-    addr:'德中路1號（援中段二小段61地號）', permit:'110高市工建02428號', floor:'15F/B3',
-    avgPrice:42.29, minPrice:36.89, maxPrice:42.91, count:45, units:170,
-    layout:'A.B棟15層；2房(23.73~26.03坪)／3房(31.90~38.74坪)；平面130+機械44位',
-    r2:33, r3:67, r4:0, loan:'80%', handover:'已完工',
-    kit:['堡立名廚豪山三機','波蘭Amica洗碗機','Amica IH感應爐','日本KVK花灑'],
-    bath:['和成智慧型超級馬桶（全戶）'],
-    other:['德國太格隔音地板','BWT全棟淨水','5+5膠合超鋁氣密窗','後勁溪水岸第一排'],
-    amenities:{'休閒社交':['接待大廳','交誼廳','會議室'],'景觀綠化':['空中花園'],'生活機能':['信箱區','曬被區']},
-    notes:'公設比25~34.36%（全區最低）／建蔽率39.09%／基地897.23坪／管費80元。許堅倚建築師。',
-    analysis:'公設比最低、水岸景觀稀缺，建材規格紮實。一年均價已從40.36萬上漲至42.29萬。',
-    tag:'premium', lat:22.721025, lng:120.279742, s591:'https://newhouse.591.com.tw/137113/detail'},
-
-  {name:'鳳凰萃', dev:'隆大建設', status:'新成屋',
-    addr:'大學二十六街', permit:'-', floor:'15F/B2',
-    avgPrice:39.61, minPrice:37.52, maxPrice:42.36, count:33, units:201,
-    layout:'A.B棟15層；2房(~22坪)／3房(~34坪)／2+1房',
-    r2:73, r3:21, r4:6, loan:'80%', handover:'已完工',
-    kit:['林內三機','Panasonic廚櫃'], bath:['HCG雙免治','Panasonic暖風'],
-    other:['防水保固10年','冠軍磁磚'],
-    amenities:{'運動健身':['健身房'],'休閒娛樂':['KTV','Lounge Bar'],'休閒社交':['接待大廳','交誼廳'],'景觀綠化':['空中花園'],'生活機能':['信箱區','曬被區','EV充電預留']},
-    analysis:'2房73%投資導向。防水保固10年罕見，溢價+8.8%守穩。',
-    tag:'normal', lat:22.729691, lng:120.282784, s591:null},
-
-  {name:'以學MDT', dev:'華友聯開發', status:'預售屋',
-    addr:'大學西路（近大學六十街）', permit:'110高市工建02835號', floor:'15F/B3',
-    avgPrice:39.03, minPrice:36.75, maxPrice:46.05, count:18, units:229,
-    layout:'A.B棟單層4戶2梯／D棟單層8戶3梯；2房(25~26)／3房(33~38)／4房(45~49)；全平面257位',
-    r2:22, r3:65, r4:13, loan:'80%', handover:'2027Q4',
-    kit:['德國noblessa廚具','SVAGO感應爐','BOSCH全嵌洗碗機'],
-    bath:['Villeroy&Boch五金','Panasonic暖風'],
-    other:['LOW-E膠合玻璃','3M除氯淨水','日本三井MITSUI公設','229戶零店面','管費75元（全區最低）'],
-    amenities:{'運動健身':['健身房'],'休閒社交':['接待大廳','交誼廳','閱覽室'],'兒童親子':['兒童遊戲區'],'景觀綠化':['三重綠意景觀','空中花園'],'生活機能':['信箱區','EV充電預留']},
-    notes:'公設比36%／建蔽率28.8%／基地1513坪／管費75元。許堅倚建築師。',
-    analysis:'高雄大學首排綠景，日本三井公設設計＋4房產品。管費75元全區最低，自住有利。',
-    tag:'normal', lat:22.732979, lng:120.275128, s591:'https://newhouse.591.com.tw/139856/detail'},
-
-  {name:'冠傑Ai', dev:'冠傑建設', status:'預售屋',
-    addr:'大學十街近大學東路', permit:'109高市工建00940號', floor:'15F/B3',
-    avgPrice:38.90, minPrice:37.43, maxPrice:42.00, count:5, units:231,
-    layout:'2棟15層；2房(24~29坪)／3房(30~41坪)；平面189+機械28位',
-    r2:60, r3:40, r4:0, loan:'80%', handover:'待定',
-    kit:['義大利BEST除氯洗烘碗機'], bath:['INAX主浴','TOTO次浴','V&B五金'],
-    other:['紅磚隔間','ERIE淨軟水系統','公設比36.8%','基地1055坪'],
-    notes:'公設比36.8%／基地1055坪。弘憲聯合建築師。原 HTML 戶數80戶嚴重低估，實為231戶。',
-    analysis:'231戶中量社區，冠傑系列規格穩定。預售僅5筆，代表性偏低。',
-    tag:'normal', lat:22.726062, lng:120.290188, s591:'https://newhouse.591.com.tw/139219/detail'},
-
-  {name:'翊城晶綻', dev:'翊城建設', status:'新成屋',
-    addr:'大學十六街298號', permit:'-', floor:'13F/B3',
-    avgPrice:38.50, minPrice:36.31, maxPrice:46.05, count:13, units:60,
-    layout:'A棟13層；2房(26.18~28.24坪)／3房(36.31~36.59坪)',
-    r2:60, r3:40, r4:0, loan:'80%', handover:'已完工',
-    kit:['資訊待補'], bath:['資訊待補'],
-    other:['基地323.28坪','1:2.5低梯戶比','戶戶邊間','純住宅60戶'],
-    notes:'原 HTML 標15F、地址「高大商圈」皆錯誤。實為13F、大學十六街298號。',
-    analysis:'60戶迷你純住宅，低梯戶比，戶戶邊間。高大東南側成熟區。',
-    tag:'normal', lat:22.727332, lng:120.283848, s591:'https://newhouse.591.com.tw/138413/detail'},
-
-  {name:'遠見禾悅', dev:'全誠建設', status:'新成屋',
-    addr:'大學南路168號', permit:'-', floor:'15F/B2',
-    avgPrice:38.88, minPrice:36.98, maxPrice:40.52, count:66, units:170,
-    layout:'A.B.D三棟15層；全3房規劃(34~49坪)；單層4戶雙梯',
-    r2:0, r3:100, r4:0, loan:'80%', handover:'已完工',
-    kit:['義大利Miton等級進口廚具'], bath:['INAX精品衛浴'],
-    other:['公設比34%','全3房配置（區域唯一）','戶戶邊間雙梯'],
-    amenities:{'運動健身':['健身房'],'休閒娛樂':['KTV','視聽室'],'休閒社交':['接待大廳','交誼廳'],'兒童親子':['親子遊戲區'],'景觀綠化':['中庭花園','空中花園'],'生活機能':['信箱區','曬被區']},
-    analysis:'純3房、低公設、戶戶邊間，自住首選。66筆成交流動性佳，+6.8%溢價穩健。',
-    tag:'normal', lat:22.732190, lng:120.294212, s591:'https://newhouse.591.com.tw/137479/detail'},
-
-  {name:'蒙瑪特', dev:'璞盛建築', status:'新成屋',
-    addr:'大學二十二街52~60號', permit:'-', floor:'9F/B2',
-    avgPrice:39.20, minPrice:38.00, maxPrice:40.00, count:13, units:33,
-    layout:'單棟9層；2房(23坪)／2+1房(29坪)／3房(37坪)',
-    r2:50, r3:50, r4:0, loan:'80%', handover:'已完工',
-    kit:['德國品牌（待補）'], bath:['V&B、GROHE五金（待補）'],
-    other:['33戶純住宅','戶戶邊間','衛浴皆開窗','步行3分至高大'],
-    notes:'原 HTML「拓真」案實際為「蒙瑪特」，地址樓層戶數均價全部錯誤。璞盛/宇富建設。',
-    analysis:'33戶迷你精品，戶戶邊間衛浴開窗。藍田里核心，步行3分高大校園。',
-    tag:'normal', lat:22.725971, lng:120.281188, s591:'https://newhouse.591.com.tw/139600/detail'},
-
-  {name:'行見築', dev:'居富建設', status:'預售屋',
-    addr:'大學三十二街vs大學七街', permit:'110高市工建02726號', floor:'15F/B3',
-    avgPrice:38.27, minPrice:36.14, maxPrice:40.83, count:46, units:129,
-    layout:'A.B棟15層；2房(26坪)／3房(33~40坪)／4房(47~48坪)',
-    r2:40, r3:38, r4:22, loan:'80%', handover:'2030Q4',
-    kit:['BOSCH全嵌洗碗機','Panasonic廚具'], bath:['Panasonic雙免治（全戶）'],
-    other:['BWT全棟淨水','全熱交換器','一樓4.7米','全平面138位','管費80元'],
-    amenities:{'運動健身':['健身房'],'休閒社交':['接待大廳','交誼廳','閱覽室','棋藝室'],'娛樂才藝':['鋼琴教室'],'生活機能':['信箱區']},
-    analysis:'純自住規劃，含4房22%家庭客。低梯戶比、建材紮實，46筆成交流動性佳。',
-    tag:'normal', lat:22.730988, lng:120.289325, s591:'https://newhouse.591.com.tw/138788/detail'},
-
-  {name:'高大之森', dev:'中德建設（茂德）', status:'預售屋',
-    addr:'楠海路（近藍田路）vs大學三十一街', permit:'112高市工建01079號', floor:'15F/B4',
-    avgPrice:50.20, minPrice:35.47, maxPrice:53.40, count:331, units:362,
-    layout:'A.B棟15層；2房(17~28坪)／3房(33~36坪)',
-    r2:56, r3:44, r4:0, loan:'80%', handover:'2026Q3',
-    kit:['櫻花全套廚具','廚下熱飲機'], bath:['TOTO全系列雙免治（全戶）'],
-    other:['德國BWT軟水','3M全棟淨水','長庚活水','日立永大電梯','GreenWeb防霾紗窗','一期已完銷'],
-    amenities:{'運動健身':['健身房','瑜伽教室'],'休閒娛樂':['KTV','Lounge Bar','視聽室'],'休閒社交':['接待大廳','交誼廳','閱覽室'],'兒童親子':['兒童遊戲區','親子遊戲區'],'景觀綠化':['中庭花園','空中花園'],'生活機能':['信箱區','曬被區','廚藝教室']},
-    notes:'此案為高大之森一期，二期為「高大之森2・高大之上」。基地1345.5坪／建蔽率39.74%。承優營造、大瀚建築師。',
-    analysis:'全區成交量No.1（331筆）。預售最新成交53.4萬/坪改寫楠梓新高，完工後換手價可能修正。',
-    tag:'premium', lat:22.722786, lng:120.275654, s591:'https://newhouse.591.com.tw/134280/detail'},
-
-  {name:'吉隆森淼', dev:'吉隆建設', status:'預售屋',
-    addr:'德民路758號', permit:'110高市工建02971-01號', floor:'15F/B4',
-    avgPrice:37.40, minPrice:36.28, maxPrice:38.69, count:16, units:157,
-    layout:'單棟15層；2房(26~32坪)／2+1房(29~30坪)／3房(32~45坪)；平面169位',
-    r2:25, r3:65, r4:10, loan:'80%', handover:'2026Q4',
-    kit:['櫻花三機'], bath:['TOTO免治'],
-    other:['贈大金全屋冷氣（全戶）','Weber隔音地墊','右昌森林公園步行2分','EMS充電系統'],
-    notes:'⚠ 屬楠梓加工區生活圈，非高大特區核心。公設比36.7%／基地721.72坪／管費80元。',
-    analysis:'贈大金全屋冷氣最大賣點，2+1房格局彈性高。位置偏西楠梓，溢價空間有限。',
-    tag:'normal', warn:true, lat:22.722123, lng:120.293271, s591:'https://newhouse.591.com.tw/139815/detail'},
-
-  {name:'琢萃', dev:'協勝發建設', status:'新成屋',
-    addr:'高雄大學路506號', permit:'-', floor:'15F/B3',
-    avgPrice:34.95, minPrice:32.00, maxPrice:38.00, count:13, units:190,
-    layout:'A.B兩棟15層；2房(24~25坪)／3房(39坪)／4房(49~50坪)／2+1房(33~40坪)',
-    r2:30, r3:35, r4:25, loan:'80%', handover:'已完工',
-    kit:['德國VB五金（待確認）'], bath:['資訊待補'],
-    other:['基地1123.83坪','203個車位','協勝發30年品牌','藍田雙語國小旁'],
-    notes:'原 HTML 完全無此案資料。2026/4全新完工，13筆成交均價35萬。開價38萬、優惠35萬。',
-    analysis:'協勝發累計4000戶口碑，對面永信原旭已成交40萬，35萬有議價空間。',
-    tag:'discount', lat:22.730970, lng:120.285063, s591:'https://newhouse.591.com.tw/140264/detail'},
-
-  {name:'冠傑UI', dev:'冠傑建設', status:'新成屋',
-    addr:'大學三十八街51號', permit:'110高市工建00003號', floor:'15F/B2',
-    avgPrice:32.53, minPrice:19.57, maxPrice:38.68, count:184, units:190,
-    layout:'A.B棟15層；2房(21~28坪)／3房(29~40坪)；平面195位',
-    r2:62, r3:38, r4:0, loan:'80%', handover:'已完工',
-    kit:['義大利BEST洗烘碗機','升降吊廚'], bath:['V&B五金','INAX主浴','TOTO次浴'],
-    other:['ERIE全戶淨軟水','紅磚隔間（隔音最佳）','SAKURA氣密窗','基地1076坪','管費70元'],
-    notes:'公設比36.8%／基地1076坪／管費70元。弘憲聯合建築師。',
-    analysis:'建材規格CP值最高，INAX+V&B豪宅建材卻是折價案。逢低布局時機。',
-    tag:'discount', lat:22.732801, lng:120.293561, s591:null},
-
-  {name:'崑庭馥御', dev:'崑庭建設', status:'新成屋',
-    addr:'大學五十六街53號', permit:'-', floor:'多期多棟',
-    avgPrice:31.62, minPrice:28.42, maxPrice:36.84, count:369, units:450,
-    layout:'多期多棟；2房(25~28)／3房(29~40)／4房(45+)',
-    r2:40, r3:45, r4:15, loan:'80%', handover:'各期不同',
-    kit:['各期不一（E期以上林內三機）'], bath:['各期不同，H期HCG免治'],
-    other:['多期累積大量戶數','各期規格差異大','議價空間大'],
-    notes:'多期規格差異大，E/F/G/H期建材不同，需確認期別。',
-    analysis:'369筆成交流動性全區第二，庫存壓力使議價空間最大。',
-    tag:'discount', lat:22.729506, lng:120.276683, s591:'https://newhouse.591.com.tw/130646/detail'},
-
-  {name:'博市陞', dev:'龍陞開發', status:'新成屋',
-    addr:'大學二十九路568號', permit:'109高市工建00996號', floor:'15F/B2',
-    avgPrice:40.57, minPrice:36.70, maxPrice:42.00, count:36, units:94,
-    layout:'單棟15層；2房(20.46~20.64坪)／3房(31.61~34.87坪)；平面33+機械37位',
-    r2:65, r3:35, r4:0, loan:'80%', handover:'已完工',
-    kit:['資訊待補'], bath:['資訊待補'],
-    other:['Alfa Safe柱中柱耐震','台泥混凝土','三菱電梯','EMS電動車系統','防水保固5年'],
-    notes:'公設比35%／建蔽率29.55%／基地458.71坪。原東聯合建築師。日祥營造。',
-    analysis:'94戶精品小社區，耐震規格高。均價40.57萬達溢價+11.4%，36筆建議再觀察。',
-    tag:'premium', lat:22.729644, lng:120.275567, s591:'https://newhouse.591.com.tw/136422/detail'},
-
-  {name:'百達悠悅', dev:'友友地產', status:'新成屋',
-    addr:'大學二十二街19號', permit:'109高市工建築字第01988-01號', floor:'15F/B3',
-    avgPrice:39.04, minPrice:37.13, maxPrice:40.71, count:4, units:114,
-    layout:'2房(27.42坪)／3房(32.53~41.75坪)／3+1房(42.16~43.37坪)；全平面104位',
-    r2:30, r3:60, r4:10, loan:'80%', handover:'隨時交屋',
-    kit:['Panasonic廚具','BOSCH洗碗機'], bath:['美標衛浴','INAX','ROCA'],
-    other:['鑄鋁門','EMS系統','全棟淨軟水','近藍田公園','家樂福2分鐘'],
-    amenities:{'休閒社交':['接待大廳','交誼廳','會議室','廚藝教室'],'運動健身':['健身房'],'兒童親子':['兒童遊戲區'],'景觀綠化':['空中花園']},
-    notes:'基地629.46坪／建蔽率37.31%／公設比36%。使用執照為(113)高市工建築使字第00513號。',
-    analysis:'大學南路核心圈首排景觀宅，生活機能完備，扣除早期預售轉登紀錄後，近一年真實成屋行情穩定站上39萬大關。',
-    tag:'premium', lat:22.725120, lng:120.282910, s591:'https://newhouse.591.com.tw/135968/detail'},
-
-  {name:'芳崗河左岸', dev:'芳崗建設', status:'新成屋',
-    addr:'援中路二巷8號', permit:'108高市工建築字第00502-02號', floor:'15F/B3',
-    avgPrice:35.08, minPrice:33.25, maxPrice:37.34, count:8, units:112,
-    layout:'2房(29.19~31.02坪)／3房(36.89~41.66坪)／3+1房(49.78~52.13坪)；平面110位',
-    r2:40, r3:50, r4:10, loan:'80%', handover:'隨時交屋',
-    kit:['林內雙口爐','喜特麗烘碗機','喜特麗電子鍋收納櫃','GlemGas微波烤箱'], bath:['美標衛浴','康乃馨四合一暖風機'],
-    other:['中華鋁門窗','亞爾浦軟水','耶魯電子鎖','後勁溪親水公園首排'],
-    amenities:{'休閒社交':['接待大廳','交誼廳','閱覽室','廚藝教室'],'運動健身':['健身房','瑜伽教室'],'生活機能':['信箱區','曬被區']},
-    notes:'基地772.74坪／建蔽率32.39%／公設比36%／管理費70元。使照為(113)高市工建築使字第00945號。',
-    analysis:'主打後勁溪親水公園第一排永久棟距與水岸景觀，近一年去重後成屋單價約落在35萬上下，性價比極高。',
-    tag:'normal', lat:22.722950, lng:120.288540, s591:'https://market.591.com.tw/5950631'},
-
-  {name:'辰旭', dev:'永信建設', status:'新成屋',
-    addr:'大學一街132號', permit:'110高市工建築字第01878-04號', floor:'25F/B3',
-    avgPrice:33.99, minPrice:32.44, maxPrice:37.15, count:15, units:96,
-    layout:'3房(46坪)／4房(53坪)；全平面103位',
-    r2:0, r3:70, r4:30, loan:'80%', handover:'隨時交屋',
-    kit:['Panasonic IH爐','德匠櫃體','林內抽油煙機/烘碗機'], bath:['TOTO衛浴'],
-    other:['先建後售指標案','25層超高層地標','純住家零店面','低建蔽率24.65%'],
-    amenities:{'休閒社交':['接待大廳','交誼廳','視聽室'],'景觀綠化':['中庭花園'],'運動健身':['健身房'],'生活機能':['信箱區']},
-    notes:'基地681.6坪／建蔽率24.65%／公設比36.4%／管理費90元。使照為(114)高市工建築使字第01049號。',
-    analysis:'永信建設具口碑的「先建後售」代表作，純住家無店面且低建蔽率。過濾特殊關係極端值交易後，成屋均價精準落在34萬。',
-    tag:'discount', lat:22.723820, lng:120.285620, s591:'https://newhouse.591.com.tw/139857/detail'},
-];
-
-// ── 售出率計算 ──
+function tagOf(p){
+  if(p.tagMode==='manual') return p.tagManual||'normal';
+  const pct=(p.avgPrice-S.base)/S.base*100;
+  return pct>=S.premiumPct?'premium':pct<=S.discountPct?'discount':'normal';
+}
+const pctOf=p=>(p.avgPrice-S.base)/S.base*100;
 function getSold(p){
-  if(!p.units || p.units===0) return null;
-  const pct = Math.min(Math.round(p.count/p.units*100),100);
-  return {pct, text:`實登 ${p.count} / ${p.units} 戶`};
+  if(!p.units) return null;
+  return {pct:Math.min(Math.round(p.count/p.units*100),100), text:`實登 ${p.count} / ${p.units} 戶`};
 }
-function soldColor(tag){ return tag==='premium'?'red':tag==='discount'?'green':'amber'; }
+const soldColor=t=>t==='premium'?'red':t==='discount'?'green':'amber';
+const tagLabel=t=>t==='premium'?'溢價':t==='discount'?'折價':'均值';
+const tagCls=t=>t==='premium'?'tb-red':t==='discount'?'tb-green':'tb-amber';
+const statusCls=s=>s.includes('預售')?'sp-pre':s.includes('新成')?'sp-new':'sp-done';
+const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
-// ── 甜甜圈 SVG ──
-function donutSVG(p, size=44){
-  const vals=[['1R',p.r1||0,'#A78BFA'],['2R',p.r2||0,'#3B82F6'],['3R',p.r3||0,'#22C55E'],['4R',p.r4||0,'#F97316']].filter(x=>x[1]>0);
-  const cx=size/2,cy=size/2,R=size*0.34,sw=size*0.11,circ=2*Math.PI*R;
-  let offset=0,arcs='';
-  vals.forEach(([_,v,c])=>{
-    const dash=circ*v/100;
-    arcs+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${c}" stroke-width="${sw}" stroke-dasharray="${dash} ${circ-dash}" stroke-dashoffset="${-circ*offset/100}" transform="rotate(-90 ${cx} ${cy})"/>`;
-    offset+=v;
-  });
-  const main=p.r3>p.r2?`${p.r3}%`:`${p.r2}%`;
-  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">${arcs}<text x="${cx}" y="${cy+4}" text-anchor="middle" style="font-family:var(--mono);font-size:${size*0.2}px;font-weight:700;fill:var(--text)">${main}</text></svg>`;
+/* ── 頁首與 KPI：全部由資料即時計算 ── */
+function renderHeader(){
+  document.getElementById('hTitle').textContent=S.title;
+  document.getElementById('hSub').textContent=`${S.subtitle} · ${S.version} · 資料 ${S.dataDate}`;
+  document.title=S.title;
+  const hi=projects.reduce((a,b)=>a.avgPrice>b.avgPrice?a:b);
+  const lo=projects.reduce((a,b)=>a.avgPrice<b.avgPrice?a:b);
+  document.getElementById('mastStats').innerHTML=`
+    <div class="mstat"><div class="l">案數</div><div class="v">${projects.length}</div><div class="s">CASES</div></div>
+    <div class="mstat"><div class="l">區域基準</div><div class="v">${S.base.toFixed(2)}<small>萬/坪</small></div><div class="s">BASELINE</div></div>
+    <div class="mstat"><div class="l">最高均價</div><div class="v hi">${hi.avgPrice.toFixed(2)}</div><div class="s">${esc(hi.name)}</div></div>
+    <div class="mstat"><div class="l">最低均價</div><div class="v lo">${lo.avgPrice.toFixed(2)}</div><div class="s">${esc(lo.name)}</div></div>`;
+
+  const withSold=projects.map(p=>({p,s:getSold(p)})).filter(x=>x.s);
+  const hiS=withSold.reduce((a,b)=>a.s.pct>=b.s.pct?a:b);
+  const loS=withSold.reduce((a,b)=>a.s.pct<=b.s.pct?a:b);
+  const totCount=projects.reduce((a,p)=>a+(p.count||0),0);
+  const thHi=S.base*(1+S.premiumPct/100), thLo=S.base*(1+S.discountPct/100);
+  document.getElementById('kpiRow').innerHTML=`
+    <div class="kpi"><div class="l">溢價門檻 +${S.premiumPct}%</div><div class="v red">${thHi.toFixed(2)}</div><div class="s">≥ 此為紅標</div></div>
+    <div class="kpi"><div class="l">折價門檻 ${S.discountPct}%</div><div class="v green">${thLo.toFixed(2)}</div><div class="s">≤ 此為綠標</div></div>
+    <div class="kpi"><div class="l">累計成交筆數</div><div class="v">${totCount.toLocaleString()}</div><div class="s">${projects.length} 案合計</div></div>
+    <div class="kpi"><div class="l">最高售出率</div><div class="v green">${hiS.s.pct}%</div><div class="s">${esc(hiS.p.name)} ${hiS.p.count}/${hiS.p.units}</div></div>
+    <div class="kpi"><div class="l">最低售出率</div><div class="v red">${loS.s.pct}%</div><div class="s">${esc(loS.p.name)} ${loS.p.count}/${loS.p.units}</div></div>
+    <div class="kpi"><div class="l">資料更新</div><div class="v" style="font-size:19px">${esc(S.dataDate)}</div><div class="s">民國年月</div></div>`;
+  document.getElementById('footer').textContent=`${S.title} · ${S.subtitle} · ${S.version}`;
 }
 
-// ── CARD 渲染 ──
+/* ── 卡片 ── */
 function renderCards(){
   const search=document.getElementById('searchInput').value.toLowerCase();
   const tag=document.getElementById('tagFilter').value;
   const stat=document.getElementById('statusFilter').value;
   const sort=document.getElementById('sortSelect').value;
-
-  let data=[...projects].map((p,i)=>({...p,idx:i,pct:(p.avgPrice-BASE)/BASE*100,sold:getSold(p)}));
+  let data=projects.map((p,i)=>({...p,idx:i,tag:tagOf(p),pct:pctOf(p),sold:getSold(p)}));
   if(search) data=data.filter(p=>[p.name,p.dev,p.addr,...(p.kit||[]),...(p.bath||[]),...(p.other||[])].join(' ').toLowerCase().includes(search));
   if(tag!=='all') data=data.filter(p=>p.tag===tag);
   if(stat!=='all') data=data.filter(p=>p.status.includes(stat));
-
   if(sort==='price_desc') data.sort((a,b)=>b.avgPrice-a.avgPrice);
   else if(sort==='price_asc') data.sort((a,b)=>a.avgPrice-b.avgPrice);
   else if(sort==='sold_desc') data.sort((a,b)=>(b.sold?.pct||0)-(a.sold?.pct||0));
   else data.sort((a,b)=>b.count-a.count);
-
   document.getElementById('tblCt').textContent=`${data.length} / ${projects.length} 案`;
 
-  const pct2cls=p=>{const pct=p.pct;return pct>=10?'red':pct<=-5?'green':'amber'};
-  const tagLabel=t=>t==='premium'?'溢價':t==='discount'?'折價':'均值';
-  const tagCls=t=>t==='premium'?'tb-red':t==='discount'?'tb-green':'tb-amber';
-  const statusCls=s=>{if(s.includes('預售'))return 'sp-pre';if(s.includes('新成'))return 'sp-new';return 'sp-done'};
-
-  const grid=document.getElementById('listView');
-  grid.innerHTML=data.map(p=>{
+  document.getElementById('listView').innerHTML=data.map(p=>{
     const barW=Math.min(Math.abs(p.pct)/25*100,100);
-    const barCls=p.pct>=0?'vs-pos':'vs-neg';
-    const prCls=pct2cls(p);
-    const kits=(p.kit||[]).slice(0,2).map(k=>`<span class="chip k">${k.substring(0,20)}</span>`).join('');
-    const baths=(p.bath||[]).slice(0,1).map(b=>`<span class="chip b">${b.substring(0,18)}</span>`).join('');
-    // amenities card summary
+    const prCls=p.pct>=S.premiumPct?'red':p.pct<=S.discountPct?'green':'amber';
+    const kits=(p.kit||[]).slice(0,2).map(k=>`<span class="chip k">${esc(k.substring(0,20))}</span>`).join('');
+    const baths=(p.bath||[]).slice(0,1).map(b=>`<span class="chip b">${esc(b.substring(0,18))}</span>`).join('');
     const allAm=p.amenities?Object.values(p.amenities).flat():[];
-    const amShow=allAm.slice(0,4).map(a=>`<span class="chip am">${a}</span>`).join('');
-    const amMore=allAm.length>4?`<span class="chip am-more">+${allAm.length-4}</span>`:'';
-    const amRow=allAm.length>0?`<div class="cc-amenities">${amShow}${amMore}</div>`:'';
-    const soldPct=p.sold?p.sold.pct:null;
-    const soldBar=soldPct!==null?`<div class="cc-sold">
-      <div class="sold-label">
-        <span class="sold-l">售出率（實登/總戶）</span>
-        <span class="sold-pct" style="color:var(--${soldColor(p.tag)})">${soldPct}%</span>
-      </div>
-      <div class="sold-bar"><div class="sold-fill ${soldColor(p.tag)}" style="width:${soldPct}%"></div></div>
-      <div style="font-size:11px;color:var(--mute);margin-top:3px;font-family:var(--mono)">${p.sold.text}</div>
-    </div>`:'';
+    const amRow=allAm.length?`<div class="cc-amenities">${allAm.slice(0,4).map(a=>`<span class="chip am">${esc(a)}</span>`).join('')}${allAm.length>4?`<span class="chip am-more">+${allAm.length-4}</span>`:''}</div>`:'';
+    const vsRow=(p.vs&&p.vsPublic)?`<div class="cc-vs">${esc(p.vs)}</div>`:'';
+    const soldBar=p.sold?`<div class="cc-sold">
+      <div class="sold-label"><span class="sold-l">售出率（實登/總戶）</span>
+      <span class="sold-pct" style="color:var(--${soldColor(p.tag)==='amber'?'amber':soldColor(p.tag)})">${p.sold.pct}%</span></div>
+      <div class="sold-bar"><div class="sold-fill ${soldColor(p.tag)}" style="width:${p.sold.pct}%"></div></div>
+      <div class="sold-sub">${p.sold.text}</div></div>`:'';
     return `<div class="case-card ${p.tag}${p.warn?' warn':''}" onclick="openModal(${p.idx})">
-      <div class="cc-head">
-        <div class="cc-top">
-          <div class="cc-name">${p.name}${p.warn?' ⚠':''}</div>
-          <div class="cc-price ${prCls}">${p.avgPrice.toFixed(2)}<span style="font-size:13px;color:var(--dim);font-weight:400"> 萬</span></div>
-        </div>
-        <div class="cc-meta">
-          <span class="cc-dev">${p.dev}</span>
-          <span class="status-pill ${statusCls(p.status)}">${p.status}</span>
-        </div>
-      </div>
-      ${soldBar}
-      <div class="cc-chips">${kits}${baths}</div>
-      ${amRow}
+      <div class="cc-head"><div class="cc-top">
+        <div class="cc-name">${esc(p.name)}${p.warn?' ⚠':''}</div>
+        <div class="cc-price ${prCls}">${p.avgPrice.toFixed(2)}<small> 萬</small></div></div>
+        <div class="cc-meta"><span class="cc-dev">${esc(p.dev)}</span>
+        <span class="status-pill ${statusCls(p.status)}">${esc(p.status)}</span></div></div>
+      ${vsRow}${soldBar}
+      <div class="cc-chips">${kits}${baths}</div>${amRow}
       <div class="cc-foot">
-        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill ${barCls}" style="width:${barW/2}%"></div></div>
+        <div class="vs-track"><div class="vs-center"></div><div class="vs-fill ${p.pct>=0?'vs-pos':'vs-neg'}" style="width:${barW/2}%"></div></div>
         <span class="vs-pct ${p.pct>=0?'up':'dn'}">${(p.pct>=0?'+':'')+p.pct.toFixed(1)}%</span>
-        <span class="tag-badge ${tagCls(p.tag)}">${tagLabel(p.tag)}</span>
-      </div>
-    </div>`;
+        <span class="tag-badge ${tagCls(p.tag)}">${tagLabel(p.tag)}</span></div></div>`;
   }).join('');
 }
 
-// ── MAP ──
+/* ── 地圖 ── */
 let mapObj=null,mapMarkers=[];
 function initMap(){
   if(mapObj) return;
   mapObj=L.map('theMap',{zoomControl:true,scrollWheelZoom:true}).setView([22.7280,120.2830],15);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
-    attribution:'&copy; OpenStreetMap &copy; CARTO',subdomains:'abcd',maxZoom:19
+  L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+    attribution:'&copy; Google',subdomains:['0','1','2','3'],maxZoom:20
   }).addTo(mapObj);
   projects.forEach((p,i)=>{
-    const isPresale=p.status.includes('预售')||p.status.includes('預售');
-    let cls=isPresale?'presale':(p.tag==='premium'?'premium':p.tag==='discount'?'discount':'normal');
+    if(p.lat==null||p.lng==null) return;
+    const t=tagOf(p), pct=pctOf(p);
+    let cls=p.status.includes('預售')?'presale':(t==='premium'?'premium':t==='discount'?'discount':'normal');
     if(p.warn) cls='warn';
-    const pct=(p.avgPrice-BASE)/BASE*100;
-    const ic=L.divIcon({className:'',html:`<div class="mpill ${cls}"><span class="pn">${p.name}</span><span class="pp">${p.avgPrice.toFixed(2)} 萬</span></div>`,iconSize:[null,null],iconAnchor:[0,30]});
+    const ic=L.divIcon({className:'',html:`<div class="mpill ${cls}"><span class="pn">${esc(p.name)}</span><span class="pp">${p.avgPrice.toFixed(2)} 萬</span></div>`,iconSize:[null,null],iconAnchor:[0,30]});
     const m=L.marker([p.lat,p.lng],{icon:ic}).addTo(mapObj);
-    const priceColor=p.tag==='premium'?'var(--red)':p.tag==='discount'?'var(--green)':'var(--amber)';
+    const pc=t==='premium'?'var(--red)':t==='discount'?'var(--green)':'var(--amber)';
     const sold=getSold(p);
     m.bindPopup(`<div class="mpopup">
-      <div class="mpopup-tag" style="color:${priceColor}">${p.tag==='premium'?'▲ 溢價':p.tag==='discount'?'▼ 折價':'● 均值'} · ${p.status}</div>
-      <h3>${p.name}</h3>
-      <div class="mprice" style="color:${priceColor}">${p.avgPrice.toFixed(2)} 萬/坪</div>
-      <div class="mdelta" style="color:${priceColor}">${(pct>=0?'+':'')+pct.toFixed(1)}% vs 基準</div>
-      <div class="mrow"><span>建商</span><span>${p.dev}</span></div>
+      <div class="mpopup-tag" style="color:${pc}">${t==='premium'?'▲ 溢價':t==='discount'?'▼ 折價':'● 均值'} · ${esc(p.status)}</div>
+      <h3>${esc(p.name)}</h3>
+      <div class="mprice" style="color:${pc}">${p.avgPrice.toFixed(2)} 萬/坪</div>
+      <div class="mdelta" style="color:${pc}">${(pct>=0?'+':'')+pct.toFixed(1)}% vs 基準</div>
+      <div class="mrow"><span>建商</span><span>${esc(p.dev)}</span></div>
       <div class="mrow"><span>戶數</span><span>${p.units} 戶</span></div>
-      ${sold?`<div class="mrow"><span>售出率</span><span style="color:${priceColor}">${sold.pct}%</span></div>`:''}
-      <button class="dbtn" onclick="closePopups();openModal(${i})">查看完整詳情 →</button>
-    </div>`,{maxWidth:230});
+      ${sold?`<div class="mrow"><span>售出率</span><span style="color:${pc}">${sold.pct}%</span></div>`:''}
+      <button class="dbtn" onclick="closePopups();openModal(${i})">查看完整詳情 →</button></div>`,{maxWidth:236});
     mapMarkers.push(m);
   });
 }
 function closePopups(){if(mapObj)mapMarkers.forEach(m=>m.closePopup())}
-
 function setView(v){
   document.getElementById('listView').style.display=v==='list'?'':'none';
   document.getElementById('mapView').style.display=v==='map'?'block':'none';
@@ -1274,126 +423,115 @@ function setView(v){
   if(v==='map'){initMap();setTimeout(()=>mapObj.invalidateSize(),80)}
 }
 
-// ── MODAL ──
+/* ── 詳情 ── */
 function openModal(i){
-  const p=projects[i];
-  const pct=(p.avgPrice-BASE)/BASE*100;
+  const p=projects[i], t=tagOf(p), pct=pctOf(p);
   const pctStr=(pct>=0?'+':'')+pct.toFixed(1)+'%';
-  const priceColor=p.tag==='premium'?'var(--red)':p.tag==='discount'?'var(--green)':'var(--amber)';
-  const tagCls=p.tag==='premium'?'tb-red':p.tag==='discount'?'tb-green':'tb-amber';
-  const tagLabel=p.tag==='premium'?'PREMIUM 溢價':p.tag==='discount'?'DISCOUNT 折價':'NEUTRAL 均值';
-  document.getElementById('modalTag').innerHTML=`<span class="tag-badge ${tagCls}" style="font-size:13px">${tagLabel} ${pctStr}</span>`;
+  const pc=t==='premium'?'var(--red)':t==='discount'?'var(--green)':'var(--gold)';
+  document.getElementById('modalTag').innerHTML=`<span class="tag-badge ${tagCls(t)}" style="font-size:13px">${tagLabel(t)} ${pctStr}</span>`;
   document.getElementById('modalTitle').textContent=p.name+(p.warn?' ⚠':'');
-  document.getElementById('modalDev').textContent=`${p.dev} · ${p.status} · 交屋：${p.handover}`;
+  document.getElementById('modalDev').textContent=`${p.dev} · ${p.status} · 交屋：${p.handover||'—'}`;
   const sold=getSold(p);
   document.getElementById('modalSold').innerHTML=sold?`<div class="ms-row">
     <span style="font-size:14px;color:var(--dim);min-width:100px">售出率（實登）</span>
-    <div class="ms-bar"><div class="ms-fill ${soldColor(p.tag)}" style="width:${sold.pct}%;background:${priceColor}"></div></div>
-    <span class="ms-pct" style="color:${priceColor}">${sold.pct}%</span>
-  </div><div class="ms-detail">${sold.text} · 貸款成數 ${p.loan}</div>`:'';
+    <div class="ms-bar"><div class="ms-fill" style="width:${sold.pct}%;background:${pc}"></div></div>
+    <span class="ms-pct" style="color:${pc}">${sold.pct}%</span></div>
+    <div class="ms-detail">${sold.text} · 貸款成數 ${esc(p.loan||'—')}</div>`:'';
+  const donut=(()=>{const vals=[['2R',p.r2||0,'#33658A'],['3R',p.r3||0,'#2F6B4F'],['4R',p.r4||0,'#C19A53'],['1R',p.r1||0,'#8E7CC3']].filter(x=>x[1]>0);
+    const size=52,cx=26,cy=26,R=17.7,sw=5.7,circ=2*Math.PI*R;let off=0,arcs='';
+    vals.forEach(([_,v,c])=>{const dash=circ*v/100;arcs+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${c}" stroke-width="${sw}" stroke-dasharray="${dash} ${circ-dash}" stroke-dashoffset="${-circ*off/100}" transform="rotate(-90 ${cx} ${cy})"/>`;off+=v});
+    const main=(p.r3||0)>(p.r2||0)?`${p.r3}%`:`${p.r2||0}%`;
+    return `<svg width="52" height="52" viewBox="0 0 52 52">${arcs}<text x="26" y="30" text-anchor="middle" style="font-family:var(--mono);font-size:11px;font-weight:600">${main}</text></svg>`})();
+  const fpHtml=(p.floorPlans&&p.floorPlans.length)?`
+    <div class="msec-title">平 面 圖</div>
+    <div class="fp-count">共 ${p.floorPlans.length} 張 · 點擊放大</div>
+    <div class="fp-grid">${p.floorPlans.map((u,fi)=>`<img class="fp-thumb" src="${esc(u)}" loading="lazy" onclick="openLB(${i},${fi})" onerror="this.style.display='none'">`).join('')}</div>`:'';
   document.getElementById('modalBody').innerHTML=`
     <div class="price-hero">
-      <span class="ph-num" style="color:${priceColor}">${p.avgPrice.toFixed(2)}</span>
+      <span class="ph-num" style="color:${pc}">${p.avgPrice.toFixed(2)}</span>
       <span class="ph-unit">萬/坪</span>
-      <span style="font-size:15px;font-family:var(--mono);color:var(--dim)">${p.minPrice} ~ ${p.maxPrice} · ${p.count} 筆成交</span>
-    </div>
-    <div class="msec-title">建案資訊</div>
+      <span style="font-size:14px;font-family:var(--mono);color:var(--dim)">${p.minPrice} ~ ${p.maxPrice} · ${p.count} 筆成交</span></div>
+    ${(p.vs&&p.vs.trim())?`<div class="vs-box"><span class="al">對戰華雄音樂匯${p.vsPublic?'':'（內部）'}</span>${esc(p.vs)}</div>`:''}
+    <div class="msec-title">建 案 資 訊</div>
     <div class="info-grid">
-      <div class="info-cell"><div class="ic-label">地址</div><div class="ic-val">${p.addr}</div></div>
-      <div class="info-cell"><div class="ic-label">樓層 / 戶數</div><div class="ic-val">${p.floor} / ${p.units} 戶</div></div>
-      <div class="info-cell"><div class="ic-label">建造執照</div><div class="ic-val" style="font-size:13px">${p.permit||'—'}</div></div>
-      <div class="info-cell full"><div class="ic-label">格局規劃</div><div class="ic-val">${p.layout}</div></div>
-      <div class="info-cell"><div class="ic-label">房型比例</div><div class="ic-val" style="display:flex;align-items:center;gap:12px">${donutSVG(p,52)}
-        <div style="font-size:13px;color:var(--dim);line-height:1.8">${p.r2?`2房 ${p.r2}%<br>`:''}${p.r3?`3房 ${p.r3}%<br>`:''}${p.r4?`4房 ${p.r4}%`:''}</div>
-      </div></div>
-      <div class="info-cell"><div class="ic-label">座標</div><div class="ic-val" style="font-family:var(--mono);font-size:13px">${p.lat.toFixed(6)}, ${p.lng.toFixed(6)}</div></div>
+      <div class="info-cell"><div class="ic-label">地址</div><div class="ic-val">${esc(p.addr)}</div></div>
+      <div class="info-cell"><div class="ic-label">樓層 / 戶數</div><div class="ic-val">${esc(p.floor)} / ${p.units} 戶</div></div>
+      <div class="info-cell"><div class="ic-label">建造執照</div><div class="ic-val" style="font-size:13px">${esc(p.permit||'—')}</div></div>
+      <div class="info-cell"><div class="ic-label">貸款 / 交屋</div><div class="ic-val">${esc(p.loan||'—')} / ${esc(p.handover||'—')}</div></div>
+      <div class="info-cell full"><div class="ic-label">格局規劃</div><div class="ic-val">${esc(p.layout)}</div></div>
+      <div class="info-cell full"><div class="ic-label">房型比例</div><div class="ic-val" style="display:flex;align-items:center;gap:12px">${donut}
+        <div style="font-size:13px;color:var(--dim);line-height:1.8">${p.r2?`2房 ${p.r2}%　`:''}${p.r3?`3房 ${p.r3}%　`:''}${p.r4?`4房 ${p.r4}%`:''}</div></div></div>
     </div>
-    <div class="msec-title">廚衛建材</div>
+    <div class="msec-title">廚 衛 建 材</div>
     <div class="mat-list">
-      ${(p.kit||[]).map(k=>`<span class="chip k">廚 ${k}</span>`).join('')}
-      ${(p.bath||[]).map(b=>`<span class="chip b">衛 ${b}</span>`).join('')}
-    </div>
-    <div class="msec-title">特色配備</div>
-    <div class="mat-list">${(p.other||[]).map(o=>`<span class="chip">${o}</span>`).join('')}</div>
-    ${p.amenities && Object.keys(p.amenities).length>0 ? `
-    <div class="msec-title">公設設施</div>
-    <div>${Object.entries(p.amenities).map(([cat,items])=>`
-      <div class="am-group">
-        <div class="am-group-label">${cat}</div>
-        <div class="am-chips">${items.map(it=>`<span class="chip am">${it}</span>`).join('')}</div>
-      </div>`).join('')}
-    </div>` : ''}
-    ${p.notes?`<div class="notes-box"><b style="color:var(--amber)">注意事項</b><br>${p.notes}</div>`:''}
-    <div class="analysis-box"><span class="al">分析觀點</span>${p.analysis}</div>
-    <div id="fp-inject"></div>
+      ${(p.kit||[]).map(k=>`<span class="chip k">廚 ${esc(k)}</span>`).join('')}
+      ${(p.bath||[]).map(b=>`<span class="chip b">衛 ${esc(b)}</span>`).join('')}</div>
+    <div class="msec-title">特 色 配 備</div>
+    <div class="mat-list">${(p.other||[]).map(o=>`<span class="chip">${esc(o)}</span>`).join('')}</div>
+    ${p.amenities&&Object.keys(p.amenities).length?`<div class="msec-title">公 設 設 施</div>
+      <div>${Object.entries(p.amenities).map(([cat,items])=>`<div class="am-group"><div class="am-group-label">${esc(cat)}</div>
+      <div class="am-chips">${items.map(it=>`<span class="chip am">${esc(it)}</span>`).join('')}</div></div>`).join('')}</div>`:''}
+    ${p.notes?`<div class="notes-box"><b style="color:var(--amber)">注意事項</b><br>${esc(p.notes)}</div>`:''}
+    ${p.warnReason?`<div class="notes-box"><b style="color:var(--amber)">⚠ 警示</b><br>${esc(p.warnReason)}</div>`:''}
+    <div class="analysis-box"><span class="al">分 析 觀 點</span>${esc(p.analysis)}</div>
+    ${fpHtml}
     <div class="link-row">
-      ${p.s591?`<a class="link-btn" href="${p.s591}" target="_blank">591 詳情 ↗</a>`:''}
-      <a class="link-btn" href="https://www.google.com/maps/?q=${p.lat},${p.lng}" target="_blank">Google Map ↗</a>
-    </div>`;
-  // 插入平面圖
-  const fpDiv = document.getElementById('fp-inject');
-  const fpImgs = FLOOR_PLANS[p.name];
-  if(fpImgs && fpImgs.length > 0){
-    let fpHtml = '<div class="msec-title">FLOOR PLANS · 平面圖</div>';
-    fpHtml += '<div class="fp-count">共 ' + fpImgs.length + ' 張 · 點擊放大</div>';
-    fpHtml += '<div class="fp-grid">';
-    for(let fi=0; fi<fpImgs.length; fi++){
-      fpHtml += '<img class="fp-thumb" src="' + fpImgs[fi] + '" loading="lazy" onclick="openLB(' + i + ',' + fi + ')" onerror="this.style.display=&apos;none&apos;">';
-    }
-    fpHtml += '</div>';
-    fpDiv.innerHTML = fpHtml;
-  } else {
-    fpDiv.innerHTML = '';
-  }
+      ${p.s591?`<a class="link-btn" href="${esc(p.s591)}" target="_blank">591 詳情 ↗</a>`:''}
+      <a class="link-btn" href="https://www.google.com/maps/?q=${p.lat},${p.lng}" target="_blank">Google Map ↗</a></div>`;
   document.getElementById('overlay').classList.add('open');
-  if(mapObj) mapObj.setView([p.lat,p.lng],17,{animate:true});
+  if(mapObj&&p.lat!=null) mapObj.setView([p.lat,p.lng],17,{animate:true});
 }
+function closeModal(){document.getElementById('overlay').classList.remove('open')}
 
-// ── LIGHTBOX ──
-let lbName = '', lbIdx = 0;
-function openLB(projIdx, idx){
-  lbName = projects[projIdx].name; lbIdx = idx;
-  const imgs = FLOOR_PLANS[lbName];
-  document.getElementById('lbImg').src = imgs[idx];
-  document.getElementById('lbCounter').textContent = (idx+1) + ' / ' + imgs.length;
+/* ── 燈箱 ── */
+let lbProj=null,lbIdx=0;
+function openLB(pi,idx){
+  lbProj=projects[pi];lbIdx=idx;
+  document.getElementById('lbImg').src=lbProj.floorPlans[idx];
+  document.getElementById('lbCounter').textContent=(idx+1)+' / '+lbProj.floorPlans.length;
   document.getElementById('lbOverlay').classList.add('on');
 }
-function closeLB(){ document.getElementById('lbOverlay').classList.remove('on'); }
+function closeLB(){document.getElementById('lbOverlay').classList.remove('on')}
 function lbNav(d){
-  const imgs = FLOOR_PLANS[lbName];
-  lbIdx = (lbIdx + d + imgs.length) % imgs.length;
-  document.getElementById('lbImg').src = imgs[lbIdx];
-  document.getElementById('lbCounter').textContent = (lbIdx+1) + ' / ' + imgs.length;
+  const imgs=lbProj.floorPlans;
+  lbIdx=(lbIdx+d+imgs.length)%imgs.length;
+  document.getElementById('lbImg').src=imgs[lbIdx];
+  document.getElementById('lbCounter').textContent=(lbIdx+1)+' / '+imgs.length;
 }
-document.addEventListener('keydown', e=>{
-  const lb = document.getElementById('lbOverlay');
-  if(!lb.classList.contains('on')) return;
-  if(e.key==='Escape') closeLB();
-  if(e.key==='ArrowLeft') lbNav(-1);
-  if(e.key==='ArrowRight') lbNav(1);
+document.addEventListener('keydown',e=>{
+  const lb=document.getElementById('lbOverlay');
+  if(lb.classList.contains('on')){
+    if(e.key==='Escape')closeLB();
+    if(e.key==='ArrowLeft')lbNav(-1);
+    if(e.key==='ArrowRight')lbNav(1);
+  }else if(e.key==='Escape')closeModal();
 });
 
-function closeModal(){document.getElementById('overlay').classList.remove('open')}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
-
-// ── INIT ──
-document.getElementById('searchInput').addEventListener('input',renderCards);
-document.getElementById('tagFilter').addEventListener('change',renderCards);
-document.getElementById('statusFilter').addEventListener('change',renderCards);
-document.getElementById('sortSelect').addEventListener('change',renderCards);
-setView('list');
-renderCards();
+/* ── 啟動 ── */
+async function boot(){
+  try{
+    if(window.__DATA__){ DB=window.__DATA__; }
+    else{
+      const r=await fetch('./data.json?t='+Date.now());
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      DB=await r.json();
+    }
+  }catch(err){
+    const el=document.getElementById('loadErr');
+    el.style.display='block';
+    el.innerHTML=`<b style="color:var(--red)">資料載入失敗</b><br>無法讀取 data.json（${esc(err.message)}）。<br>
+    1. 確認 data.json 與 index.html 在 GitHub 同一層目錄。<br>
+    2. 若是離線開啟（USB 直接點開檔案），瀏覽器會封鎖本機讀檔——請使用後台「下載離線單檔版」產出的檔案。`;
+    return;
+  }
+  S=DB.settings; projects=DB.projects;
+  renderHeader(); renderCards();
+  ['searchInput','tagFilter','statusFilter','sortSelect'].forEach(id=>{
+    document.getElementById(id).addEventListener(id==='searchInput'?'input':'change',renderCards);
+  });
+  setView('list');
+}
+boot();
 </script>
-
-<!-- LIGHTBOX -->
-<div class="lb-overlay" id="lbOverlay">
-  <button class="lb-close" onclick="closeLB()">×</button>
-  <button class="lb-nav lb-prev" onclick="lbNav(-1)">‹</button>
-  <img class="lb-img" id="lbImg" src="https://normalsky315-jpg.github.io/NKUinfos/" alt="平面圖">
-  <button class="lb-nav lb-next" onclick="lbNav(1)">›</button>
-  <div class="lb-counter" id="lbCounter"></div>
-</div>
-
-
-
-</body></html>
+</body>
+</html>
