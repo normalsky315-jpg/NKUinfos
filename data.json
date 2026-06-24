@@ -1004,133 +1004,6 @@
    ]
   },
   {
-   "name": "博市陞",
-   "dev": "龍陞開發",
-   "status": "新成屋",
-   "addr": "大學二十九路568號",
-   "permit": "109高市工建00996號",
-   "floor": "15F/B2",
-   "avgPrice": 40.57,
-   "minPrice": 36.7,
-   "maxPrice": 42,
-   "count": 36,
-   "units": 94,
-   "layout": "單棟15層；2房(20.46~20.64坪)／3房(31.61~34.87坪)；平面33+機械37位",
-   "r1": 0,
-   "r2": 65,
-   "r3": 35,
-   "r4": 0,
-   "loan": "80%",
-   "handover": "已完工",
-   "kit": [
-    "資訊待補"
-   ],
-   "bath": [
-    "資訊待補"
-   ],
-   "other": [
-    "Alfa Safe柱中柱耐震",
-    "台泥混凝土",
-    "三菱電梯",
-    "EMS電動車系統",
-    "防水保固5年"
-   ],
-   "amenities": {},
-   "notes": "公設比35%／建蔽率29.55%／基地458.71坪。原東聯合建築師。日祥營造。",
-   "analysis": "94戶精品小社區，耐震規格高。均價40.57萬達溢價+11.4%，36筆建議再觀察。",
-   "vs": "",
-   "vsPublic": false,
-   "tagMode": "auto",
-   "tagManual": "premium",
-   "warn": false,
-   "warnReason": "",
-   "lat": 22.729644,
-   "lng": 120.275567,
-   "s591": "https://newhouse.591.com.tw/136422/detail",
-   "floorPlans": [
-    "https://drive.google.com/thumbnail?id=1aj6-4ymP1mM0GgecGwn5I5ma-zVXOTKb&sz=w1200",
-    "https://drive.google.com/thumbnail?id=1cZGcjktjObjsWMJnw8wZJUW5nSZL4XbG&sz=w1200",
-    "https://drive.google.com/thumbnail?id=1tGQ11BFZ_PqKVdkh7DRjHADqEEbFuwTl&sz=w1200",
-    "https://drive.google.com/thumbnail?id=1REmGBTSsCua0Nf1Ta4eKJgBZlFck77ZV&sz=w1200",
-    "https://drive.google.com/thumbnail?id=123Cnua5Xj5dUVRJ55HlQwNB1iYrvY821&sz=w1200",
-    "https://drive.google.com/thumbnail?id=1EvUePrkcrOA3--nWcoKmRwC1giRz2Kl2&sz=w1200",
-    "https://drive.google.com/thumbnail?id=18uOozheYf4GVsAEgmyP9kZytqcsEKahW&sz=w1200",
-    "https://drive.google.com/thumbnail?id=1WHaZNTfQNX8IwuDU6k_wk9iJYGclxx4-&sz=w1200"
-   ]
-  },
-  {
-   "name": "百達悠悅",
-   "dev": "友友地產",
-   "status": "新成屋",
-   "addr": "大學二十二街19號",
-   "permit": "109高市工建築字第01988-01號",
-   "floor": "15F/B3",
-   "avgPrice": 39.04,
-   "minPrice": 37.13,
-   "maxPrice": 40.71,
-   "count": 4,
-   "units": 114,
-   "layout": "2房(27.42坪)／3房(32.53~41.75坪)／3+1房(42.16~43.37坪)；全平面104位",
-   "r1": 0,
-   "r2": 30,
-   "r3": 60,
-   "r4": 10,
-   "loan": "80%",
-   "handover": "隨時交屋",
-   "kit": [
-    "Panasonic廚具",
-    "BOSCH洗碗機"
-   ],
-   "bath": [
-    "美標衛浴",
-    "INAX",
-    "ROCA"
-   ],
-   "other": [
-    "鑄鋁門",
-    "EMS系統",
-    "全棟淨軟水",
-    "近藍田公園",
-    "家樂福2分鐘"
-   ],
-   "amenities": {
-    "休閒社交": [
-     "接待大廳",
-     "交誼廳",
-     "會議室",
-     "廚藝教室"
-    ],
-    "運動健身": [
-     "健身房"
-    ],
-    "兒童親子": [
-     "兒童遊戲區"
-    ],
-    "景觀綠化": [
-     "空中花園"
-    ]
-   },
-   "notes": "基地629.46坪／建蔽率37.31%／公設比36%。使用執照為(113)高市工建築使字第00513號。",
-   "analysis": "大學南路核心圈首排景觀宅，生活機能完備，扣除早期預售轉登紀錄後，近一年真實成屋行情穩定站上39萬大關。",
-   "vs": "",
-   "vsPublic": false,
-   "tagMode": "auto",
-   "tagManual": "premium",
-   "warn": false,
-   "warnReason": "",
-   "lat": 22.72512,
-   "lng": 120.28291,
-   "s591": "https://newhouse.591.com.tw/135968/detail",
-   "floorPlans": [
-    "https://drive.google.com/thumbnail?id=1Z1Dr0U-Tj6mcWvNFcK78PsNwo2A9r5jX&sz=w1200",
-    "https://drive.google.com/thumbnail?id=1S-ovugUFJ6kDhlYJFrkH0CWFTaDjUS2e&sz=w1200",
-    "https://drive.google.com/thumbnail?id=1HZFnhPIBce_VzvRfQ2oezgwy7AhLyH5B&sz=w1200",
-    "https://drive.google.com/thumbnail?id=11gupBw9Z41t9OqEmZeE7XYh7asHYZNkY&sz=w1200",
-    "https://drive.google.com/thumbnail?id=17Z-f2feoCG11gkpVtnun4Dn5xEuh_trJ&sz=w1200",
-    "https://drive.google.com/thumbnail?id=1KAIbk5-mHgI-hIQNPPs1Mdsg9fe4ulJi&sz=w1200"
-   ]
-  },
-  {
    "name": "芳崗河左岸",
    "dev": "芳崗建設",
    "status": "新成屋",
@@ -1193,6 +1066,61 @@
    "lng": 120.28854,
    "s591": "https://market.591.com.tw/5950631",
    "floorPlans": []
+  },
+  {
+   "name": "博市陞",
+   "dev": "龍陞開發",
+   "status": "新成屋",
+   "addr": "大學二十九路568號",
+   "permit": "109高市工建00996號",
+   "floor": "15F/B2",
+   "avgPrice": 40.57,
+   "minPrice": 36.7,
+   "maxPrice": 42,
+   "count": 36,
+   "units": 94,
+   "layout": "單棟15層；2房(20.46~20.64坪)／3房(31.61~34.87坪)；平面33+機械37位",
+   "r1": 0,
+   "r2": 65,
+   "r3": 35,
+   "r4": 0,
+   "loan": "80%",
+   "handover": "已完工",
+   "kit": [
+    "資訊待補"
+   ],
+   "bath": [
+    "資訊待補"
+   ],
+   "other": [
+    "Alfa Safe柱中柱耐震",
+    "台泥混凝土",
+    "三菱電梯",
+    "EMS電動車系統",
+    "防水保固5年"
+   ],
+   "amenities": {},
+   "notes": "公設比35%／建蔽率29.55%／基地458.71坪。原東聯合建築師。日祥營造。",
+   "analysis": "94戶精品小社區，耐震規格高。均價40.57萬達溢價+11.4%，36筆建議再觀察。",
+   "vs": "",
+   "vsPublic": false,
+   "tagMode": "auto",
+   "tagManual": "premium",
+   "warn": false,
+   "warnReason": "",
+   "lat": 22.729644,
+   "lng": 120.275567,
+   "s591": "https://newhouse.591.com.tw/136422/detail",
+   "floorPlans": [
+    "https://drive.google.com/thumbnail?id=1aj6-4ymP1mM0GgecGwn5I5ma-zVXOTKb&sz=w1200",
+    "https://drive.google.com/thumbnail?id=1cZGcjktjObjsWMJnw8wZJUW5nSZL4XbG&sz=w1200",
+    "https://drive.google.com/thumbnail?id=1tGQ11BFZ_PqKVdkh7DRjHADqEEbFuwTl&sz=w1200",
+    "https://drive.google.com/thumbnail?id=1REmGBTSsCua0Nf1Ta4eKJgBZlFck77ZV&sz=w1200",
+    "https://drive.google.com/thumbnail?id=123Cnua5Xj5dUVRJ55HlQwNB1iYrvY821&sz=w1200",
+    "https://drive.google.com/thumbnail?id=1EvUePrkcrOA3--nWcoKmRwC1giRz2Kl2&sz=w1200",
+    "https://drive.google.com/thumbnail?id=18uOozheYf4GVsAEgmyP9kZytqcsEKahW&sz=w1200",
+    "https://drive.google.com/thumbnail?id=1WHaZNTfQNX8IwuDU6k_wk9iJYGclxx4-&sz=w1200"
+   ]
   },
   {
    "name": "辰旭",
