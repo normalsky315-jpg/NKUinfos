@@ -1121,7 +1121,14 @@
    "lat": 22.72512,
    "lng": 120.28291,
    "s591": "https://newhouse.591.com.tw/135968/detail",
-   "floorPlans": []
+   "floorPlans": [
+    "https://drive.google.com/thumbnail?id=1Z1Dr0U-Tj6mcWvNFcK78PsNwo2A9r5jX&sz=w1200",
+    "https://drive.google.com/thumbnail?id=1S-ovugUFJ6kDhlYJFrkH0CWFTaDjUS2e&sz=w1200",
+    "https://drive.google.com/thumbnail?id=1HZFnhPIBce_VzvRfQ2oezgwy7AhLyH5B&sz=w1200",
+    "https://drive.google.com/thumbnail?id=11gupBw9Z41t9OqEmZeE7XYh7asHYZNkY&sz=w1200",
+    "https://drive.google.com/thumbnail?id=17Z-f2feoCG11gkpVtnun4Dn5xEuh_trJ&sz=w1200",
+    "https://drive.google.com/thumbnail?id=1KAIbk5-mHgI-hIQNPPs1Mdsg9fe4ulJi&sz=w1200"
+   ]
   },
   {
    "name": "芳崗河左岸",
