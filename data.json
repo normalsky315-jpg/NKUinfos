@@ -1,9 +1,9 @@
 {
  "settings": {
   "title": "高大特區房產分析儀表板",
-  "subtitle": "內政部實價登錄資料 113.01–115.03  龍登國際製作",
+  "subtitle": "內政部實價登錄資料 113.01–115.05  龍登國際製作",
   "version": "V18",
-  "dataDate": "115.03",
+  "dataDate": "115.05",
   "base": 36.42,
   "premiumPct": 10,
   "discountPct": -5
@@ -536,7 +536,7 @@
    "floor": "15F/B2",
    "avgPrice": 38.89,
    "minPrice": 36.75,
-   "maxPrice": 41.0,
+   "maxPrice": 41,
    "count": 67,
    "units": 170,
    "layout": "A.B.D三棟15層；全3房規劃(34~49坪)；單層4戶雙梯",
